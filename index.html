@@ -3,58 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lê Nam - Camera & Computer</title>
+    <title>Lê Nam - Giải Pháp Công Nghệ & Đào Tạo Lái Xe</title>
     <style>
-        :root { --primary: #0033a0; --price: #d32f2f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        header { background: white; text-align: center; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo { max-width: 150px; height: auto; margin-bottom: 10px; }
-        .search-box { max-width: 600px; margin: 20px auto; padding: 0 15px; }
-        #searchInput { width: 100%; padding: 12px 25px; border-radius: 50px; border: 1px solid #ddd; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: auto; padding: 20px; min-height: 400px; }
-        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 220px; object-fit: cover; }
-        .info { padding: 15px; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin: 10px 0; }
-        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 10px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        :root { --primary: #0033a0; --price: #d32f2f; --dark: #1a252f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; color: #333; }
         
-        footer { background: #2c3e50; color: white; padding: 40px 20px; margin-top: 50px; }
-        .footer-content { max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
-        .footer-info { flex: 1; min-width: 300px; }
-        .footer-maps { flex: 1; min-width: 300px; height: 250px; border-radius: 10px; overflow: hidden; }
+        /* Header & Slogan */
+        header { background: white; text-align: center; padding: 30px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .logo { max-width: 180px; height: auto; }
+        .slogan { font-style: italic; color: var(--primary); font-weight: 500; margin-top: 10px; font-size: 1.1em; }
+        
+        /* Tìm kiếm */
+        .search-box { max-width: 700px; margin: -25px auto 30px; padding: 0 15px; position: relative; z-index: 10; }
+        #searchInput { width: 100%; padding: 15px 30px; border-radius: 50px; border: none; box-shadow: 0 5px 20px rgba(0,0,0,0.1); outline: none; font-size: 16px; }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1250px; margin: auto; padding: 20px; min-height: 500px; }
+        
+        /* Card Sản phẩm */
+        .card { background: white; width: 280px; margin: 15px; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 230px; object-fit: cover; }
+        .info { padding: 18px; }
+        .info h3 { margin: 0; font-size: 1.1em; color: #222; height: 45px; overflow: hidden; line-height: 1.4; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.4em; margin: 12px 0; }
+        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 12px; text-decoration: none; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .zalo-btn:hover { background: #00257a; }
+
+        /* Footer */
+        footer { background: var(--dark); color: #ecf0f1; padding: 50px 20px 20px; margin-top: 60px; }
+        .footer-content { max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .footer-info h3 { color: #3498db; border-left: 4px solid #3498db; padding-left: 10px; margin-bottom: 20px; }
+        .footer-info p { line-height: 1.6; margin: 10px 0; font-size: 0.95em; }
+        .footer-maps { height: 300px; border-radius: 15px; overflow: hidden; border: 2px solid #34495e; }
         iframe { width: 100%; height: 100%; border: none; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #34495e; opacity: 0.6; font-size: 0.8em; }
     </style>
 </head>
 <body>
 
 <header>
     <img src="Logo_LeNam.jpg" alt="Lê Nam Logo" class="logo">
-    <h1 style="color:var(--primary); margin:0;">Lê Nam Camera & Computer</h1>
+    <div class="slogan">"Lê Nam - Trao trọn niềm tin, vững bước mọi hành trình"</div>
 </header>
 
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm...">
+    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm camera, laptop hoặc khóa học lái xe...">
 </div>
 
 <div class="container" id="product-list">
-    <p>Đang tải sản phẩm...</p>
+    <p style="text-align: center; width: 100%;">Đang tải dữ liệu...</p>
 </div>
 
 <footer>
     <div class="footer-content">
         <div class="footer-info">
             <h3>THÔNG TIN LIÊN HỆ</h3>
-            <p><strong>Cửa hàng:</strong> Lê Nam Camera & Computer</p>
-            <p><strong>Địa chỉ:</strong> [ĐIỀN ĐỊA CHỈ CỦA SẾP VÀO ĐÂY]</p>
-            <p><strong>Hotline/Zalo:</strong> [SỐ ĐIỆN THOẠI]</p>
-            <p><strong>Chuyên:</strong> Lắp đặt Camera, sửa chữa Máy tính, Laptop.</p>
+            <p><strong>🏢 Cửa hàng:</strong> Lê Nam Camera & Computer</p>
+            <p><strong>📍 Địa chỉ:</strong> Số 85A, đường Nguyễn Văn Ni, Ấp 2, xã Tân An Hội, Củ Chi, TP.HCM</p>
+            <p><strong>📞 Hotline/Zalo:</strong> 0919.005366</p>
+            <p><strong>🛠 Dịch vụ:</strong> Lắp đặt Camera, Máy tính, Laptop, Điện gia dụng, Năng lượng mặt trời.</p>
+            <p><strong>🚗 Đào tạo:</strong> Nhận hồ sơ bằng lái A1, A, B, C1, E... Bổ túc tay lái & Đào tạo học viên thường xuyên.</p>
         </div>
         <div class="footer-maps">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5!2d106.6!3d10.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQyJzAwLjAiTiAxMDbCsDM2JzAwLjAiRQ!5e0!3m2!1svi!2svn!4v123456789" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.47288673323!2d106.48265017475147!3d10.927627456385108!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b27e69f826317%3A0x7d2873099905c928!2zODVBIOCQkC4gTmd1eeG7hW4gVsSDbiBOaSwgVMOibiBBbiBI4buZaSwgQ-G7pyBDaGksIEjhu5MgQ2jDrG0gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </div>
-    <p style="text-align:center; margin-top:30px; opacity:0.6;">© 2026 Lê Nam. All Rights Reserved.</p>
+    <div class="copyright">© 2026 Lê Nam Camera & Computer. Thiết kế bởi Đối tác lập trình.</div>
 </footer>
 
 <script type="module">
@@ -73,26 +87,30 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let products = [];
+    let allProducts = [];
 
     onValue(ref(db, 'products/'), (snapshot) => {
-        products = [];
-        snapshot.forEach(c => products.push({id: c.key, ...c.val()}));
-        render(products);
+        allProducts = [];
+        snapshot.forEach(c => allProducts.push({id: c.key, ...c.val()}));
+        render(allProducts);
     });
 
     function render(data) {
         const list = document.getElementById('product-list');
-        list.innerHTML = data.length ? "" : "Không tìm thấy sản phẩm.";
+        list.innerHTML = data.length ? "" : "<p>Không tìm thấy nội dung yêu cầu.</p>";
         data.forEach(p => {
-            const price = Number(p.price).toLocaleString('vi-VN') + " đ";
+            // Xử lý giá: Nếu không có hoặc bằng 0 thì hiện "Giá liên hệ"
+            const displayPrice = (p.price && p.price != 0) 
+                ? Number(p.price).toLocaleString('vi-VN') + " đ" 
+                : "Giá liên hệ";
+
             list.innerHTML += `
                 <div class="card">
-                    <img src="${p.img || 'https://via.placeholder.com/300'}">
+                    <img src="${p.img || 'https://via.placeholder.com/300?text=Le+Nam'}">
                     <div class="info">
                         <h3>${p.name}</h3>
-                        <div class="price">${price}</div>
-                        <a href="https://zalo.me/${p.zalo}" target="_blank" class="zalo-btn">💬 Liên hệ Zalo</a>
+                        <div class="price">${displayPrice}</div>
+                        <a href="https://zalo.me/${p.zalo || '0919005366'}" target="_blank" class="zalo-btn">💬 Tư vấn ngay</a>
                     </div>
                 </div>`;
         });
@@ -100,7 +118,7 @@
 
     document.getElementById('searchInput').oninput = (e) => {
         const txt = e.target.value.toLowerCase();
-        render(products.filter(p => p.name.toLowerCase().includes(txt)));
+        render(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
     };
 </script>
 </body>
