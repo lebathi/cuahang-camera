@@ -5,176 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hitech Camera & Computer</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; color: #333; }
-        header { background: #0068ff; color: white; text-align: center; padding: 30px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1200px; margin: auto; }
-        
-        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+        :root { --primary: #0068ff; --price: #d32f2f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
+        header { background: var(--primary); color: white; text-align: center; padding: 40px 20px; }
+        .search-box { max-width: 600px; margin: -25px auto 20px; padding: 0 15px; }
+        #searchInput { width: 100%; padding: 15px 25px; border-radius: 50px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-size: 16px; outline: none; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: auto; padding: 20px; }
+        .card { background: white; width: 280px; margin: 15px; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .card img { width: 100%; height: 220px; object-fit: cover; cursor: zoom-in; }
         .info { padding: 15px; }
-        .info h3 { margin: 0 0 10px 0; font-size: 1.1em; color: #222; height: 45px; overflow: hidden; }
-        .info p { font-size: 0.9em; color: #666; margin-bottom: 10px; height: 40px; overflow: hidden; }
-        .price { color: #d32f2f; font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+        .info h3 { margin: 0; font-size: 1.1em; color: #222; height: 45px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.4em; margin: 12px 0; }
+        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 12px; text-decoration: none; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .zalo-btn:hover { opacity: 0.9; }
         
-        .zalo-btn { 
-            display: block; background: #0068ff; color: white; text-align: center; padding: 12px; 
-            text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s;
-        }
-        .zalo-btn:hover { background: #0052cc; box-shadow: 0 4px 10px rgba(0,104,255,0.3); }
+        /* Modal xem ảnh */
+        #imgModal { display: none; position: fixed; z-index: 999; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        #imgModal img { max-width: 90%; max-height: 90%; border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Hitech Camera & Computer</h1>
-    <p>Giải pháp an ninh & Máy tính chuyên nghiệp</p>
+    <p>Giải pháp công nghệ - Uy tín hàng đầu</p>
 </header>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm tên sản phẩm bạn cần...">
+</div>
 
 <div class="container" id="product-list">
     <p>Đang tải danh sách sản phẩm...</p>
 </div>
+
+<div id="imgModal" onclick="this.style.display='none'"><img id="modalImg"></div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
-        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
+        authDomain: "cuahangcamrera.firebaseapp.com",
+        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "cuahangcamrera",
+        storageBucket: "cuahangcamrera.firebasestorage.app",
+        messagingSenderId: "306094872086",
+        appId: "1:306094872086:web:3fcd59e474557a8cb50737"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const productList = document.getElementById('product-list');
+    let allProducts = [];
+
+    // Hàm phóng to ảnh
+    window.zoomImg = (src) => {
+        document.getElementById('modalImg').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
+    };
 
     onValue(ref(db, 'products/'), (snapshot) => {
-        productList.innerHTML = "";
-        if (!snapshot.exists()) {
-            productList.innerHTML = "<p>Hiện chưa có sản phẩm nào được đăng.</p>";
-            return;
-        }
-        snapshot.forEach((childSnapshot) => {
-            const data = childSnapshot.val();
-            productList.innerHTML += `
-                <div class="card">
-                    <img src="${data.img || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="Product">
-                    <div class="info">
-                        <h3>${data.name}</h3>
-                        <p>${data.desc}</p>
-                        <div class="price">${data.price}</div>
-                        <a href="https://zalo.me/${data.zalo}" target="_blank" class="zalo-btn">💬 Nhắn Zalo tư vấn</a>
-                    </div>
-                </div>
-            `;
+        allProducts = [];
+        snapshot.forEach(child => {
+            allProducts.push({ id: child.key, ...child.val() });
         });
+        renderProducts(allProducts);
     });
+
+    function renderProducts(products) {
+        const list = document.getElementById('product-list');
+        list.innerHTML = products.length ? "" : "<p>Không tìm thấy sản phẩm phù hợp.</p>";
+        
+        products.forEach(p => {
+            const price = Number(p.price).toLocaleString('vi-VN') + " đ";
+            list.innerHTML += `
+                <div class="card">
+                    <img src="${p.img || 'https://via.placeholder.com/300'}" onclick="zoomImg(this.src)">
+                    <div class="info">
+                        <h3>${p.name}</h3>
+                        <p style="font-size: 0.9em; color: #666; height: 40px; overflow: hidden;">${p.desc}</p>
+                        <div class="price">${price}</div>
+                        <a href="https://zalo.me/${p.zalo}" target="_blank" class="zalo-btn">💬 Tư vấn Zalo</a>
+                    </div>
+                </div>`;
+        });
+    }
+
+    // Xử lý tìm kiếm
+    document.getElementById('searchInput').oninput = (e) => {
+        const text = e.target.value.toLowerCase();
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(text));
+        renderProducts(filtered);
+    };
 </script>
 </body>
 </html>
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Cửa hàng Camera & Computer</title>
-    <style> 
-        /* ... (Phần CSS giống như tôi đã gửi ở trên) ... */ 
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>Hitech Camera & Computer</h1>
-</header>
-
-<div class="container" id="product-list">
-    <p style="text-align:center;">Đang tải sản phẩm...</p>
-</div>
-
-<script type="module">
-  // 1. Cấu hình kết nối tới Firebase (Nơi chứa dữ liệu bạn nhập từ trang Admin)
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
-
-  const firebaseConfig = { databaseURL: "ĐƯỜNG_DẪN_DATABASE_CỦA_BẠN" };
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // 2. Lấy dữ liệu và hiển thị
-  const productList = document.getElementById('product-list');
-  onValue(ref(db, 'products/'), (snapshot) => {
-    productList.innerHTML = ""; // Xóa dòng "Đang tải..."
-    snapshot.forEach((childSnapshot) => {
-        const data = childSnapshot.val();
-        // Tự động tạo ô sản phẩm với nút Zalo
-        productList.innerHTML += `
-            <div class="card">
-                <img src="${data.img}" alt="Sản phẩm">
-                <div class="info">
-                    <h3>${data.name}</h3>
-                    <p>${data.desc}</p>
-                    <p class="price">${data.price}</p>
-                    <a href="https://zalo.me/${data.zalo}" target="_blank" class="zalo-btn">Hỏi mua qua Zalo</a>
-                </div>
-            </div>
-        `;
-    });
-  });
-</script>
-</body>
-</html>
-<!-- <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Cửa hàng Camera & Computer</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        header { background: #0068ff; color: white; text-align: center; padding: 20px; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
-        
-        /* Khung sản phẩm */
-        .card { background: white; width: 280px; margin: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .info { padding: 15px; }
-        .price { color: #d32f2f; font-weight: bold; font-size: 1.2em; }
-        
-        /* Nút Zalo */
-        .zalo-btn { 
-            display: block; 
-            background: #0068ff; 
-            color: white; 
-            text-align: center; 
-            padding: 10px; 
-            text-decoration: none; 
-            border-radius: 5px; 
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        .zalo-btn:hover { background: #0052cc; }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>Hitech Camera & Computer</h1>
-    <p>Tư vấn tận tâm - Lắp đặt tận nơi</p>
-</header>
-
-<div class="container" id="product-list">
-    <div class="card">
-        <img src="https://via.placeholder.com/300x200" alt="Camera">
-        <div class="info">
-            <h3>Camera Wifi Ezviz C6N</h3>
-            <p>Xoay 360 độ, đàm thoại 2 chiều, báo động chuyển động.</p>
-            <p class="price">950.000đ</p>
-            <a href="https://zalo.me/0900123456" target="_blank" class="zalo-btn">Hỏi mua qua Zalo</a>
-        </div>
-    </div>
-</div>
-
-</body>
-</html> -->
- -->
