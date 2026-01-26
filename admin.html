@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản trị Cửa hàng</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .admin-box { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h2 { text-align: center; color: #2c3e50; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 10px; }
+        button:hover { background: #219150; }
+        .note { font-size: 0.8em; color: #666; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-box">
+    <h2>Thêm Sản Phẩm Mới</h2>
+    <input type="text" id="pName" placeholder="Tên sản phẩm (VD: Camera Ezviz C6N)">
+    <input type="text" id="pPrice" placeholder="Giá tiền (VD: 890.000 VNĐ)">
+    <textarea id="pDesc" rows="3" placeholder="Mô tả cấu hình ngắn gọn"></textarea>
+    <input type="text" id="pImage" placeholder="Dán Link ảnh sản phẩm vào đây">
+    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo nhận khách">
+    
+    <button onclick="uploadProduct()">ĐĂNG LÊN TRANG CHỦ</button>
+    <p class="note">* Lưu ý: Link ảnh bạn có thể lấy từ Facebook hoặc các trang đăng ảnh miễn phí.</p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.uploadProduct = function() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const desc = document.getElementById('pDesc').value;
+        const img = document.getElementById('pImage').value;
+        const zalo = document.getElementById('pZalo').value;
+
+        if(name && price && zalo) {
+            push(ref(db, 'products/'), {
+                name: name, price: price, desc: desc, img: img, zalo: zalo
+            }).then(() => {
+                alert("✨ Đã đăng thành công! Khách hàng đã có thể xem.");
+                // Xóa form để nhập cái tiếp theo
+                document.getElementById('pName').value = "";
+                document.getElementById('pPrice').value = "";
+                document.getElementById('pDesc').value = "";
+                document.getElementById('pImage').value = "";
+            }).catch((error) => {
+                alert("Lỗi: " + error.message);
+            });
+        } else {
+            alert("Vui lòng nhập đủ: Tên, Giá và Số Zalo!");
+        }
+    }
+</script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý cửa hàng</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #eceff1; }
+        .form-container { background: white; padding: 20px; max-width: 400px; margin: auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #27ae60; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #219150; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Thêm sản phẩm mới</h2>
+    <input type="text" id="pName" placeholder="Tên sản phẩm (VD: Camera Ezviz)">
+    <input type="text" id="pPrice" placeholder="Giá tiền (VD: 950.000đ)">
+    <input type="text" id="pDesc" placeholder="Mô tả ngắn">
+    <input type="text" id="pImage" placeholder="Link ảnh sản phẩm">
+    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo nhận khách">
+    <button onclick="uploadProduct()">Đăng bài lên trang chủ</button>
+</div>
+
+<script type="module">
+  // Import Firebase (Thay thế config của bạn ở đây)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+  const firebaseConfig = {
+    databaseURL: "ĐƯỜNG_DẪN_DATABASE_CỦA_BẠN" 
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  window.uploadProduct = function() {
+    const name = document.getElementById('pName').value;
+    const price = document.getElementById('pPrice').value;
+    const desc = document.getElementById('pDesc').value;
+    const img = document.getElementById('pImage').value;
+    const zalo = document.getElementById('pZalo').value;
+
+    if(name && price) {
+        push(ref(db, 'products/'), {
+            name: name, price: price, desc: desc, img: img, zalo: zalo
+        }).then(() => {
+            alert("Đã đăng sản phẩm thành công!");
+            location.reload();
+        });
+    } else {
+        alert("Vui lòng nhập tên và giá!");
+    }
+  }
+</script>
+</body>
+</html> -->
