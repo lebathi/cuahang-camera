@@ -2,55 +2,66 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản trị Cửa hàng - Bảo mật</title>
     <style>
-        body { font-family: sans-serif; background: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        h2 { text-align: center; color: #2c3e50; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 10px; transition: 0.3s; }
         button:hover { background: #219150; }
         .logout-btn { background: #e74c3c; margin-top: 20px; }
         .logout-btn:hover { background: #c0392b; }
         .hidden { display: none; }
-        .note { font-size: 0.8em; color: #666; margin-top: 10px; }
+        .note { font-size: 0.8em; color: #666; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="login-section" class="container">
-    <h2>Đăng Nhập Quản Trị</h2>
+    <h2>🔑 Đăng Nhập Admin</h2>
     <input type="email" id="loginEmail" placeholder="Email quản trị">
     <input type="password" id="loginPassword" placeholder="Mật khẩu">
-    <button onclick="login()">ĐĂNG NHẬP</button>
+    <button id="btnLogin">ĐĂNG NHẬP</button>
+    <p class="note">Vui lòng đăng nhập để quản lý sản phẩm.</p>
 </div>
 
 <div id="admin-section" class="container hidden">
-    <h2>Thêm Sản Phẩm Mới</h2>
-    <input type="text" id="pName" placeholder="Tên sản phẩm">
-    <input type="text" id="pPrice" placeholder="Giá tiền">
-    <textarea id="pDesc" rows="3" placeholder="Mô tả cấu hình"></textarea>
-    <input type="text" id="pImage" placeholder="Link ảnh sản phẩm">
-    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo">
+    <h2>📦 Thêm Sản Phẩm Mới</h2>
+    <input type="text" id="pName" placeholder="Tên sản phẩm (VD: Camera Ezviz C6N)">
+    <input type="text" id="pPrice" placeholder="Giá tiền (VD: 890.000 VNĐ)">
+    <textarea id="pDesc" rows="3" placeholder="Mô tả cấu hình ngắn gọn"></textarea>
+    <input type="text" id="pImage" placeholder="Dán Link ảnh sản phẩm">
+    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo nhận khách">
     
-    <button onclick="uploadProduct()">ĐĂNG LÊN TRANG CHỦ</button>
-    <button class="logout-btn" onclick="logout()">ĐĂNG XUẤT</button>
+    <button id="btnUpload">ĐĂNG LÊN TRANG CHỦ</button>
+    <button class="logout-btn" id="btnLogout">ĐĂNG XUẤT</button>
 </div>
 
 <script type="module">
+    // Import các thư viện cần thiết từ Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+    // --- BƯỚC QUAN TRỌNG: ĐIỀN THÔNG TIN CỦA BẠN VÀO ĐÂY ---
     const firebaseConfig = {
-        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        apiKey: "AIzaSy...", // Lấy từ Project Settings -> General trong Firebase Console
+        authDomain: "cuahangcamrera.firebaseapp.com",
+        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app/",
+        projectId: "cuahangcamrera",
+        storageBucket: "cuahangcamrera.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
+    // Khởi tạo Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Kiểm tra trạng thái đăng nhập
+    // 1. Kiểm tra trạng thái đăng nhập
     onAuthStateChanged(auth, (user) => {
         if (user) {
             document.getElementById('login-section').classList.add('hidden');
@@ -61,21 +72,22 @@
         }
     });
 
-    // Hàm đăng nhập
-    window.login = function() {
+    // 2. Xử lý Đăng nhập
+    document.getElementById('btnLogin').onclick = () => {
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPassword').value;
         signInWithEmailAndPassword(auth, email, pass)
-            .catch(error => alert("Sai thông tin: " + error.message));
-    }
+            .then(() => alert("Chào mừng sếp đã quay trở lại!"))
+            .catch(error => alert("Lỗi đăng nhập: " + error.message));
+    };
 
-    // Hàm đăng xuất
-    window.logout = function() {
-        signOut(auth);
-    }
+    // 3. Xử lý Đăng xuất
+    document.getElementById('btnLogout').onclick = () => {
+        signOut(auth).then(() => alert("Đã đăng xuất!"));
+    };
 
-    // Hàm upload sản phẩm (giữ nguyên logic của bạn)
-    window.uploadProduct = function() {
+    // 4. Xử lý Đăng sản phẩm
+    document.getElementById('btnUpload').onclick = () => {
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
         const desc = document.getElementById('pDesc').value;
@@ -91,11 +103,11 @@
                 document.getElementById('pPrice').value = "";
                 document.getElementById('pDesc').value = "";
                 document.getElementById('pImage').value = "";
-            }).catch(error => alert("Lỗi: " + error.message));
+            }).catch(error => alert("Lỗi khi đăng bài: " + error.message));
         } else {
-            alert("Vui lòng nhập đủ thông tin!");
+            alert("Vui lòng nhập đủ: Tên, Giá và Số Zalo!");
         }
-    }
+    };
 </script>
 </body>
 </html>
