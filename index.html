@@ -3,44 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hitech Camera & Computer</title>
+    <title>Lê Nam - Camera & Computer</title>
     <style>
-        :root { --primary: #0068ff; --price: #d32f2f; }
+        :root { --primary: #0033a0; --price: #d32f2f; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        header { background: var(--primary); color: white; text-align: center; padding: 40px 20px; }
-        .search-box { max-width: 600px; margin: -25px auto 20px; padding: 0 15px; }
-        #searchInput { width: 100%; padding: 15px 25px; border-radius: 50px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-size: 16px; outline: none; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: auto; padding: 20px; }
-        .card { background: white; width: 280px; margin: 15px; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .card img { width: 100%; height: 220px; object-fit: cover; cursor: zoom-in; }
+        header { background: white; text-align: center; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { max-width: 150px; height: auto; margin-bottom: 10px; }
+        .search-box { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        #searchInput { width: 100%; padding: 12px 25px; border-radius: 50px; border: 1px solid #ddd; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: auto; padding: 20px; min-height: 400px; }
+        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
         .info { padding: 15px; }
-        .info h3 { margin: 0; font-size: 1.1em; color: #222; height: 45px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.4em; margin: 12px 0; }
-        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 12px; text-decoration: none; border-radius: 10px; font-weight: bold; transition: 0.3s; }
-        .zalo-btn:hover { opacity: 0.9; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 10px; text-decoration: none; border-radius: 8px; font-weight: bold; }
         
-        /* Modal xem ảnh */
-        #imgModal { display: none; position: fixed; z-index: 999; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        #imgModal img { max-width: 90%; max-height: 90%; border-radius: 5px; }
+        footer { background: #2c3e50; color: white; padding: 40px 20px; margin-top: 50px; }
+        .footer-content { max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
+        .footer-info { flex: 1; min-width: 300px; }
+        .footer-maps { flex: 1; min-width: 300px; height: 250px; border-radius: 10px; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Hitech Camera & Computer</h1>
-    <p>Giải pháp công nghệ - Uy tín hàng đầu</p>
+    <img src="Logo_LeNam.jpg" alt="Lê Nam Logo" class="logo">
+    <h1 style="color:var(--primary); margin:0;">Lê Nam Camera & Computer</h1>
 </header>
 
 <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm tên sản phẩm bạn cần...">
+    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm...">
 </div>
 
 <div class="container" id="product-list">
-    <p>Đang tải danh sách sản phẩm...</p>
+    <p>Đang tải sản phẩm...</p>
 </div>
 
-<div id="imgModal" onclick="this.style.display='none'"><img id="modalImg"></div>
+<footer>
+    <div class="footer-content">
+        <div class="footer-info">
+            <h3>THÔNG TIN LIÊN HỆ</h3>
+            <p><strong>Cửa hàng:</strong> Lê Nam Camera & Computer</p>
+            <p><strong>Địa chỉ:</strong> [ĐIỀN ĐỊA CHỈ CỦA SẾP VÀO ĐÂY]</p>
+            <p><strong>Hotline/Zalo:</strong> [SỐ ĐIỆN THOẠI]</p>
+            <p><strong>Chuyên:</strong> Lắp đặt Camera, sửa chữa Máy tính, Laptop.</p>
+        </div>
+        <div class="footer-maps">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5!2d106.6!3d10.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQyJzAwLjAiTiAxMDbCsDM2JzAwLjAiRQ!5e0!3m2!1svi!2svn!4v123456789" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+    <p style="text-align:center; margin-top:30px; opacity:0.6;">© 2026 Lê Nam. All Rights Reserved.</p>
+</footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -58,46 +73,34 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let allProducts = [];
-
-    // Hàm phóng to ảnh
-    window.zoomImg = (src) => {
-        document.getElementById('modalImg').src = src;
-        document.getElementById('imgModal').style.display = 'flex';
-    };
+    let products = [];
 
     onValue(ref(db, 'products/'), (snapshot) => {
-        allProducts = [];
-        snapshot.forEach(child => {
-            allProducts.push({ id: child.key, ...child.val() });
-        });
-        renderProducts(allProducts);
+        products = [];
+        snapshot.forEach(c => products.push({id: c.key, ...c.val()}));
+        render(products);
     });
 
-    function renderProducts(products) {
+    function render(data) {
         const list = document.getElementById('product-list');
-        list.innerHTML = products.length ? "" : "<p>Không tìm thấy sản phẩm phù hợp.</p>";
-        
-        products.forEach(p => {
+        list.innerHTML = data.length ? "" : "Không tìm thấy sản phẩm.";
+        data.forEach(p => {
             const price = Number(p.price).toLocaleString('vi-VN') + " đ";
             list.innerHTML += `
                 <div class="card">
-                    <img src="${p.img || 'https://via.placeholder.com/300'}" onclick="zoomImg(this.src)">
+                    <img src="${p.img || 'https://via.placeholder.com/300'}">
                     <div class="info">
                         <h3>${p.name}</h3>
-                        <p style="font-size: 0.9em; color: #666; height: 40px; overflow: hidden;">${p.desc}</p>
                         <div class="price">${price}</div>
-                        <a href="https://zalo.me/${p.zalo}" target="_blank" class="zalo-btn">💬 Tư vấn Zalo</a>
+                        <a href="https://zalo.me/${p.zalo}" target="_blank" class="zalo-btn">💬 Liên hệ Zalo</a>
                     </div>
                 </div>`;
         });
     }
 
-    // Xử lý tìm kiếm
     document.getElementById('searchInput').oninput = (e) => {
-        const text = e.target.value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(text));
-        renderProducts(filtered);
+        const txt = e.target.value.toLowerCase();
+        render(products.filter(p => p.name.toLowerCase().includes(txt)));
     };
 </script>
 </body>
