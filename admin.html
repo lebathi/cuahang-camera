@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị Cửa hàng - Bảo mật</title>
+    <title>Quản trị Cửa hàng - Hitech Camera</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
@@ -24,44 +24,42 @@
     <input type="email" id="loginEmail" placeholder="Email quản trị">
     <input type="password" id="loginPassword" placeholder="Mật khẩu">
     <button id="btnLogin">ĐĂNG NHẬP</button>
-    <p class="note">Vui lòng đăng nhập để quản lý sản phẩm.</p>
 </div>
 
 <div id="admin-section" class="container hidden">
     <h2>📦 Thêm Sản Phẩm Mới</h2>
-    <input type="text" id="pName" placeholder="Tên sản phẩm (VD: Camera Ezviz C6N)">
-    <input type="text" id="pPrice" placeholder="Giá tiền (VD: 890.000 VNĐ)">
-    <textarea id="pDesc" rows="3" placeholder="Mô tả cấu hình ngắn gọn"></textarea>
-    <input type="text" id="pImage" placeholder="Dán Link ảnh sản phẩm">
-    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo nhận khách">
+    <input type="text" id="pName" placeholder="Tên sản phẩm">
+    <input type="text" id="pPrice" placeholder="Giá tiền">
+    <textarea id="pDesc" rows="3" placeholder="Mô tả ngắn gọn"></textarea>
+    <input type="text" id="pImage" placeholder="Link ảnh sản phẩm">
+    <input type="text" id="pZalo" placeholder="Số điện thoại Zalo">
     
     <button id="btnUpload">ĐĂNG LÊN TRANG CHỦ</button>
     <button class="logout-btn" id="btnLogout">ĐĂNG XUẤT</button>
 </div>
 
 <script type="module">
-    // Import các thư viện cần thiết từ Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // --- BƯỚC QUAN TRỌNG: ĐIỀN THÔNG TIN CỦA BẠN VÀO ĐÂY ---
+    // Cấu hình Firebase của bạn
     const firebaseConfig = {
-        apiKey: "AIzaSy...", // Lấy từ Project Settings -> General trong Firebase Console
+        apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
         authDomain: "cuahangcamrera.firebaseapp.com",
-        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app/",
+        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app",
         projectId: "cuahangcamrera",
-        storageBucket: "cuahangcamrera.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        storageBucket: "cuahangcamrera.firebasestorage.app",
+        messagingSenderId: "306094872086",
+        appId: "1:306094872086:web:226a36e9233986e3b50737",
+        measurementId: "G-Y8SWJ30L37"
     };
 
-    // Khởi tạo Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // 1. Kiểm tra trạng thái đăng nhập
+    // Kiểm tra đăng nhập
     onAuthStateChanged(auth, (user) => {
         if (user) {
             document.getElementById('login-section').classList.add('hidden');
@@ -72,21 +70,21 @@
         }
     });
 
-    // 2. Xử lý Đăng nhập
+    // Xử lý Đăng nhập
     document.getElementById('btnLogin').onclick = () => {
         const email = document.getElementById('loginEmail').value;
         const pass = document.getElementById('loginPassword').value;
         signInWithEmailAndPassword(auth, email, pass)
-            .then(() => alert("Chào mừng sếp đã quay trở lại!"))
-            .catch(error => alert("Lỗi đăng nhập: " + error.message));
+            .then(() => alert("Đăng nhập thành công!"))
+            .catch(error => alert("Lỗi: " + error.message));
     };
 
-    // 3. Xử lý Đăng xuất
+    // Xử lý Đăng xuất
     document.getElementById('btnLogout').onclick = () => {
-        signOut(auth).then(() => alert("Đã đăng xuất!"));
+        signOut(auth);
     };
 
-    // 4. Xử lý Đăng sản phẩm
+    // Xử lý Đăng sản phẩm
     document.getElementById('btnUpload').onclick = () => {
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
@@ -95,17 +93,17 @@
         const zalo = document.getElementById('pZalo').value;
 
         if(name && price && zalo) {
-            push(ref(db, 'products/'), {
-                name, price, desc, img, zalo
-            }).then(() => {
+            push(ref(db, 'products/'), { name, price, desc, img, zalo })
+            .then(() => {
                 alert("✨ Đã đăng thành công!");
                 document.getElementById('pName').value = "";
                 document.getElementById('pPrice').value = "";
                 document.getElementById('pDesc').value = "";
                 document.getElementById('pImage').value = "";
-            }).catch(error => alert("Lỗi khi đăng bài: " + error.message));
+            })
+            .catch(error => alert("Lỗi: " + error.message));
         } else {
-            alert("Vui lòng nhập đủ: Tên, Giá và Số Zalo!");
+            alert("Vui lòng nhập đủ thông tin!");
         }
     };
 </script>
