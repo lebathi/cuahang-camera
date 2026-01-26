@@ -6,36 +6,39 @@
     <title>Quản trị Lê Nam</title>
     <style>
         body { font-family: sans-serif; background: #2c3e50; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .box { background: white; padding: 25px; border-radius: 12px; width: 100%; max-width: 500px; margin-bottom: 20px; box-sizing: border-box; }
+        .box { background: white; padding: 25px; border-radius: 12px; width: 100%; max-width: 500px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
         input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .edit-mode { background: #f39c12 !important; }
-        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; background: white; border-radius: 4px; margin-bottom: 5px; width: 100%; max-width: 500px; box-sizing: border-box; }
-        .btns { display: flex; gap: 5px; }
-        .btn-edit { background: #3498db; color: white; padding: 5px; border: none; cursor: pointer; border-radius: 3px; }
-        .btn-del { background: #e74c3c; color: white; padding: 5px; border: none; cursor: pointer; border-radius: 3px; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-edit-mode { background: #f39c12 !important; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: white; margin-bottom: 5px; border-radius: 8px; width: 100%; max-width: 500px; }
+        .btns { display: flex; gap: 8px; }
+        .btn-s { background: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-x { background: #e74c3c; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
         .hidden { display: none; }
+        .label-zalo { font-size: 12px; color: #27ae60; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="login-form" class="box">
-    <h2 style="text-align:center">ADMIN LÊ NAM</h2>
-    <input type="email" id="email" placeholder="Email">
+    <h2>QUẢN TRỊ LÊ NAM</h2>
+    <input type="email" id="email" placeholder="Email đăng nhập">
     <input type="password" id="pass" placeholder="Mật khẩu">
     <button onclick="login()">ĐĂNG NHẬP</button>
 </div>
 
 <div id="admin-content" class="box hidden">
-    <h2 id="form-title">Thêm Sản Phẩm</h2>
+    <h2 id="title">Thêm Sản Phẩm/Dịch Vụ</h2>
     <input type="hidden" id="edit-id">
-    <input type="text" id="name" placeholder="Tên sản phẩm">
-    <input type="text" id="price" placeholder="Giá (Chỉ nhập số)" oninput="this.value = this.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.')">
-    <textarea id="desc" placeholder="Mô tả"></textarea>
+    <input type="text" id="name" placeholder="Tên sản phẩm hoặc khóa học">
+    <input type="text" id="price" placeholder="Giá (Để trống sẽ hiện: Giá liên hệ)" oninput="format(this)">
+    <textarea id="desc" rows="2" placeholder="Mô tả cấu hình hoặc thông tin khóa học"></textarea>
     <input type="text" id="img" placeholder="Link ảnh">
-    <input type="text" id="zalo" placeholder="Số Zalo">
-    <button id="btn-submit" onclick="saveProduct()">ĐĂNG BÀI</button>
-    <button style="background:#95a5a6; margin-top:10px" onclick="location.reload()">LÀM MỚI / THOÁT</button>
+    <p class="label-zalo">✅ Zalo mặc định: 0919005366</p>
+    <input type="hidden" id="zalo" value="0919005366">
+    <button id="btn-save" onclick="save()">ĐĂNG LÊN TRANG CHỦ</button>
+    <button style="background:#95a5a6; margin-top:10px" onclick="location.reload()">HỦY / LÀM MỚI</button>
 </div>
 
 <div id="list" class="hidden" style="width:100%; max-width:500px"></div>
@@ -56,7 +59,12 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert(e.message));
+    window.format = (i) => {
+        let v = i.value.replace(/\D/g, "");
+        if(v !== "") i.value = Number(v).toLocaleString('vi-VN');
+    };
+
+    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert("Sai thông tin!"));
 
     onAuthStateChanged(auth, user => {
         if(user) {
@@ -67,57 +75,55 @@
         }
     });
 
-    window.saveProduct = () => {
+    window.save = () => {
         const id = document.getElementById('edit-id').value;
         const data = {
             name: document.getElementById('name').value,
             price: document.getElementById('price').value.replace(/\./g, ""),
             desc: document.getElementById('desc').value,
             img: document.getElementById('img').value,
-            zalo: document.getElementById('zalo').value
+            zalo: "0919005366" // Luôn sử dụng sđt của sếp
         };
 
-        if(!data.name || !data.price) return alert("Nhập đủ Tên và Giá!");
+        if(!data.name) return alert("Vui lòng nhập tên!");
 
         if(id) {
             update(ref(db, 'products/' + id), data).then(() => { alert("Đã cập nhật!"); location.reload(); });
         } else {
-            push(ref(db, 'products/'), data).then(() => { alert("Đã đăng!"); location.reload(); });
+            push(ref(db, 'products/'), data).then(() => { alert("Đã thêm thành công!"); location.reload(); });
         }
     };
 
     function load() {
         onValue(ref(db, 'products/'), s => {
-            const listDiv = document.getElementById('list');
-            listDiv.innerHTML = "<h3>Danh sách hiện có:</h3>";
+            const div = document.getElementById('list');
+            div.innerHTML = "<h3 style='color:white'>Danh sách đã đăng:</h3>";
             s.forEach(c => {
                 const d = c.val();
-                const item = document.createElement('div');
-                item.className = 'item';
-                item.innerHTML = `<span>${d.name}</span>
+                div.innerHTML += `<div class="item">
+                    <span>${d.name}</span>
                     <div class="btns">
-                        <button class="btn-edit" onclick="editItem('${c.key}', '${d.name}', '${d.price}', '${d.desc}', '${d.img}', '${d.zalo}')">Sửa</button>
-                        <button class="btn-del" onclick="delItem('${c.key}')">Xóa</button>
-                    </div>`;
-                listDiv.appendChild(item);
+                        <button class="btn-s" onclick="edit('${c.key}','${d.name}','${d.price}','${d.desc}','${d.img}')">Sửa</button>
+                        <button class="btn-x" onclick="del('${c.key}')">Xóa</button>
+                    </div>
+                </div>`;
             });
         });
     }
 
-    window.editItem = (id, n, p, d, i, z) => {
+    window.edit = (id, n, p, d, i) => {
         document.getElementById('edit-id').value = id;
         document.getElementById('name').value = n;
-        document.getElementById('price').value = Number(p).toLocaleString('vi-VN');
+        document.getElementById('price').value = p ? Number(p).toLocaleString('vi-VN') : "";
         document.getElementById('desc').value = d;
         document.getElementById('img').value = i;
-        document.getElementById('zalo').value = z;
-        document.getElementById('form-title').innerText = "Đang Sửa Sản Phẩm";
-        document.getElementById('btn-submit').innerText = "CẬP NHẬT THAY ĐỔI";
-        document.getElementById('btn-submit').classList.add('edit-mode');
+        document.getElementById('title').innerText = "Đang Sửa Sản Phẩm";
+        document.getElementById('btn-save').innerText = "CẬP NHẬT NGAY";
+        document.getElementById('btn-save').classList.add('btn-edit-mode');
         window.scrollTo(0,0);
     };
 
-    window.delItem = id => { if(confirm("Xóa chứ?")) remove(ref(db, 'products/' + id)); };
+    window.del = id => { if(confirm("Xóa sản phẩm này?")) remove(ref(db, 'products/' + id)); };
 </script>
 </body>
 </html>
