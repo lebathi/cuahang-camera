@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản trị Hitech Camera</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 10px; transition: 0.3s; }
+        body { font-family: 'Segoe UI', sans-serif; background: #2c3e50; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 12px; width: 95%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin-bottom: 20px; box-sizing: border-box; }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; }
         button:hover { background: #219150; }
-        .logout-btn { background: #e74c3c; margin-top: 20px; }
+        .logout-btn { background: #e74c3c; margin-top: 10px; height: 45px; padding: 10px; }
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .del-btn { background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; width: auto; }
         .hidden { display: none; }
     </style>
 </head>
@@ -27,20 +29,24 @@
 <div id="admin-section" class="container hidden">
     <h2>📦 Thêm Sản Phẩm</h2>
     <input type="text" id="pName" placeholder="Tên sản phẩm">
-    <input type="text" id="pPrice" placeholder="Giá tiền">
-    <textarea id="pDesc" rows="3" placeholder="Mô tả cấu hình"></textarea>
-    <input type="text" id="pImage" placeholder="Link ảnh">
+    <input type="text" id="pPrice" placeholder="Giá tiền (Ví dụ: 850000)" oninput="formatCurrency(this)">
+    <textarea id="pDesc" rows="2" placeholder="Mô tả cấu hình"></textarea>
+    <input type="text" id="pImage" placeholder="Link ảnh sản phẩm">
     <input type="text" id="pZalo" placeholder="Số điện thoại Zalo">
     <button id="btnUpload">ĐĂNG LÊN TRANG CHỦ</button>
     <button class="logout-btn" id="btnLogout">ĐĂNG XUẤT</button>
 </div>
 
+<div id="list-section" class="container hidden">
+    <h2>📋 Danh sách đã đăng</h2>
+    <div id="current-products">Đang tải...</div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // Cấu hình bạn vừa cung cấp
     const firebaseConfig = {
         apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
         authDomain: "cuahangcamrera.firebaseapp.com",
@@ -55,35 +61,29 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Kiểm tra trạng thái người dùng
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
-        } else {
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('admin-section').classList.add('hidden');
-        }
-    });
-
-    // Xử lý Đăng nhập
-    document.getElementById('btnLogin').onclick = () => {
-        const email = document.getElementById('loginEmail').value;
-        const pass = document.getElementById('loginPassword').value;
-        signInWithEmailAndPassword(auth, email, pass)
-            .then(() => { alert("Đăng nhập thành công!"); })
-            .catch(error => { 
-                console.error(error);
-                alert("Lỗi: " + error.message); // Sẽ hiện lỗi cụ thể tại đây
-            });
+    window.formatCurrency = (i) => {
+        let v = i.value.replace(/\D/g, "");
+        if (v !== "") i.value = Number(v).toLocaleString('vi-VN');
     };
 
-    document.getElementById('btnLogout').onclick = () => { signOut(auth); };
+    onAuthStateChanged(auth, (user) => {
+        const isAuth = !!user;
+        document.getElementById('login-section').classList.toggle('hidden', isAuth);
+        document.getElementById('admin-section').classList.toggle('hidden', !isAuth);
+        document.getElementById('list-section').classList.toggle('hidden', !isAuth);
+        if (isAuth) loadProducts();
+    });
 
-    // Xử lý Upload sản phẩm
+    document.getElementById('btnLogin').onclick = () => {
+        signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)
+        .catch(e => alert("Lỗi: " + e.message));
+    };
+
+    document.getElementById('btnLogout').onclick = () => signOut(auth);
+
     document.getElementById('btnUpload').onclick = () => {
         const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
+        const price = document.getElementById('pPrice').value.replace(/\D/g, "");
         const desc = document.getElementById('pDesc').value;
         const img = document.getElementById('pImage').value;
         const zalo = document.getElementById('pZalo').value;
@@ -91,14 +91,26 @@
         if(name && price && zalo) {
             push(ref(db, 'products/'), { name, price, desc, img, zalo })
             .then(() => {
-                alert("✨ Đã đăng thành công!");
+                alert("Đã đăng!");
                 document.querySelectorAll('input, textarea').forEach(el => el.value = "");
-            })
-            .catch(error => alert("Lỗi: " + error.message));
-        } else {
-            alert("Vui lòng điền đủ Tên, Giá và Zalo!");
+            });
         }
     };
+
+    function loadProducts() {
+        onValue(ref(db, 'products/'), (s) => {
+            const div = document.getElementById('current-products');
+            div.innerHTML = "";
+            s.forEach((c) => {
+                const d = c.val();
+                div.innerHTML += `<div class="product-item">
+                    <span>${d.name} (${Number(d.price).toLocaleString('vi-VN')}đ)</span>
+                    <button class="del-btn" onclick="deleteItem('${c.key}')">Xóa</button>
+                </div>`;
+            });
+        });
+    }
+    window.deleteItem = (id) => { if(confirm("Xóa chứ?")) remove(ref(db, 'products/' + id)); };
 </script>
 </body>
 </html>
