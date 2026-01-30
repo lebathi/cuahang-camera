@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị Lê Nam - Kiểm tra lỗi</title>
+    <title>Quản trị Lê Nam</title>
     <style>
         body { font-family: sans-serif; background: #2c3e50; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .box { background: white; padding: 25px; border-radius: 12px; width: 100%; max-width: 500px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
         input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
         button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-edit-active { background: #f39c12 !important; }
+        .btn-update { background: #f39c12 !important; }
         .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: white; margin-bottom: 5px; border-radius: 8px; width: 100%; max-width: 500px; }
-        .btns { display: flex; gap: 8px; }
-        .btn-s { background: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-s { background: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; }
         .btn-x { background: #e74c3c; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
         .hidden { display: none; }
     </style>
@@ -20,24 +20,22 @@
 <body>
 
 <div id="login-form" class="box">
-    <h2 style="text-align:center">ADMIN LÊ NAM</h2>
-    <input type="email" id="email" placeholder="Email">
+    <h2>🔑 QUẢN TRỊ LÊ NAM</h2>
+    <input type="email" id="email" placeholder="Email đăng nhập">
     <input type="password" id="pass" placeholder="Mật khẩu">
     <button onclick="login()">ĐĂNG NHẬP</button>
 </div>
 
 <div id="admin-content" class="box hidden">
     <h2 id="title">Thêm Sản Phẩm Mới</h2>
-    <input type="hidden" id="edit-id" value=""> 
-    
+    <input type="hidden" id="edit-id" value="">
     <input type="text" id="name" placeholder="Tên sản phẩm">
-    <input type="text" id="price" placeholder="Giá (Để trống = Giá liên hệ)" oninput="format(this)">
+    <input type="text" id="price" placeholder="Giá (Chỉ nhập số, ví dụ: 850000)" oninput="format(this)">
     <textarea id="desc" rows="3" placeholder="Mô tả chi tiết sản phẩm"></textarea>
     <input type="text" id="img" placeholder="Link ảnh sản phẩm">
-    <p style="color: green; font-weight: bold; font-size: 0.8em;">✅ Zalo mặc định: 0919005366</p>
-    
+    <p style="color: green; font-weight: bold; font-size: 13px;">✅ Hotline/Zalo mặc định: 0919005366</p>
     <button id="btn-save" onclick="save()">ĐĂNG BÀI LÊN TRANG CHỦ</button>
-    <button style="background:#95a5a6; margin-top:10px" onclick="location.reload()">HỦY / LÀM MỚI</button>
+    <button style="background:#95a5a6; margin-top:10px" onclick="location.reload()">LÀM MỚI / THOÁT</button>
 </div>
 
 <div id="list" class="hidden"></div>
@@ -63,7 +61,7 @@
         if(v !== "") i.value = Number(v).toLocaleString('vi-VN');
     };
 
-    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert("Lỗi đăng nhập!"));
+    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert("Sai thông tin đăng nhập!"));
 
     onAuthStateChanged(auth, user => {
         if(user) {
@@ -77,37 +75,30 @@
     window.save = () => {
         const id = document.getElementById('edit-id').value;
         const name = document.getElementById('name').value;
-        const price = document.getElementById('price').value.replace(/\./g, ""); // Xóa dấu chấm để lưu số nguyên
+        const price = document.getElementById('price').value.replace(/\./g, "");
         const desc = document.getElementById('desc').value;
         const img = document.getElementById('img').value;
 
-        if(!name) return alert("Vui lòng nhập tên sản phẩm!");
-
+        if(!name) return alert("Vui lòng nhập tên!");
         const data = { name, price, desc, img, zalo: "0919005366" };
 
-        if(id && id !== "") {
-            // Chế độ CẬP NHẬT
-            update(ref(db, 'products/' + id), data)
-            .then(() => { alert("Đã cập nhật thành công!"); location.reload(); })
-            .catch(e => alert("Lỗi cập nhật: " + e.message));
+        if(id) {
+            update(ref(db, 'products/' + id), data).then(() => { alert("Đã cập nhật!"); location.reload(); });
         } else {
-            // Chế độ THÊM MỚI
-            push(ref(db, 'products/'), data)
-            .then(() => { alert("Đã đăng bài mới!"); location.reload(); })
-            .catch(e => alert("Lỗi đăng bài: " + e.message));
+            push(ref(db, 'products/'), data).then(() => { alert("Đã đăng!"); location.reload(); });
         }
     };
 
     function loadList() {
         onValue(ref(db, 'products/'), s => {
             const listDiv = document.getElementById('list');
-            listDiv.innerHTML = "<h3 style='color:white'>Sản phẩm đang hiển thị:</h3>";
+            listDiv.innerHTML = "<h3 style='color:white'>Danh sách sản phẩm:</h3>";
             s.forEach(c => {
                 const d = c.val();
                 listDiv.innerHTML += `
                     <div class="item">
                         <span>${d.name}</span>
-                        <div class="btns">
+                        <div>
                             <button class="btn-s" onclick="prepareEdit('${c.key}', '${d.name}', '${d.price}', \`${d.desc}\`, '${d.img}')">Sửa</button>
                             <button class="btn-x" onclick="del('${c.key}')">Xóa</button>
                         </div>
@@ -122,15 +113,13 @@
         document.getElementById('price').value = p ? Number(p).toLocaleString('vi-VN') : "";
         document.getElementById('desc').value = d;
         document.getElementById('img').value = i;
-        
         document.getElementById('title').innerText = "ĐANG CHỈNH SỬA";
-        const btn = document.getElementById('btn-save');
-        btn.innerText = "LƯU THAY ĐỔI";
-        btn.classList.add('btn-edit-active');
+        document.getElementById('btn-save').innerText = "LƯU CẬP NHẬT";
+        document.getElementById('btn-save').classList.add('btn-update');
         window.scrollTo(0,0);
     };
 
-    window.del = id => { if(confirm("Xóa sản phẩm này?")) remove(ref(db, 'products/' + id)); };
+    window.del = id => { if(confirm("Xóa chứ sếp?")) remove(ref(db, 'products/' + id)); };
 </script>
 </body>
 </html>
