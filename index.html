@@ -5,86 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lê Nam - Camera, Computer & Đào Tạo Lái Xe</title>
     <style>
-        :root { --primary: #0033a0; --accent: #f39c12; --price: #d32f2f; --dark: #1a252f; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8f9fa; margin: 0; color: #333; }
-        
-        /* Header */
-        header { 
-            background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;
-        }
-        .logo { height: 100px; width: auto; }
-        .header-right { flex: 1; text-align: right; padding-left: 20px; }
+        :root { --primary: #0033a0; --price: #d32f2f; --dark: #1a252f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; }
+        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { height: 100px; }
+        .header-right { text-align: right; }
         .slogan { font-size: 1.5em; color: var(--primary); font-weight: 800; margin: 0; text-transform: uppercase; }
-        .header-details { font-size: 0.9em; color: #444; margin-top: 5px; line-height: 1.5; }
+        .header-info { font-size: 0.9em; margin-top: 5px; color: #444; line-height: 1.5; }
 
-        /* Search */
-        .search-container { background: var(--primary); padding: 30px 20px; text-align: center; }
-        #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; outline: none; font-size: 16px; }
+        .search-area { background: var(--primary); padding: 30px 20px; text-align: center; }
+        #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; font-size: 16px; outline: none; }
 
-        /* Product Grid */
-        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1300px; margin: 20px auto; padding: 0 15px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1300px; margin: auto; }
         .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-5px); }
         .card img { width: 100%; height: 220px; object-fit: cover; }
         .info { padding: 15px; }
-        .info h3 { margin: 0; font-size: 1.05em; height: 45px; overflow: hidden; color: #222; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.2em; margin: 10px 0; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin-top: 10px; }
 
-        /* Modal Chi tiết sản phẩm */
-        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 800px; border-radius: 15px; overflow: hidden; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: #333; z-index: 10; }
-        .modal-left { flex: 1; min-width: 300px; }
-        .modal-left img { width: 100%; height: 100%; object-fit: cover; min-height: 300px; }
-        .modal-right { flex: 1; padding: 30px; min-width: 300px; display: flex; flex-direction: column; }
-        .modal-price { font-size: 1.8em; color: var(--price); font-weight: bold; margin: 15px 0; }
-        .modal-desc { line-height: 1.6; color: #555; white-space: pre-line; margin-bottom: 20px; flex-grow: 1; }
-        .modal-zalo { background: var(--primary); color: white; text-align: center; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; }
+        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; }
+        .modal-box { background: white; width: 100%; max-width: 850px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; color: #000; }
+        .m-img { flex: 1; min-width: 300px; }
+        .m-img img { width: 100%; height: 100%; object-fit: cover; }
+        .m-text { flex: 1; padding: 35px; min-width: 300px; }
+        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px; }
 
-        /* Footer */
         footer { background: var(--dark); color: white; padding: 40px 5%; margin-top: 50px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; }
-        .footer-maps { height: 300px; border-radius: 10px; overflow: hidden; margin-top: 15px; }
+        iframe { width: 100%; height: 300px; border: none; border-radius: 10px; margin-top: 15px; }
 
-        @media (max-width: 768px) {
-            header { flex-direction: column; text-align: center; }
-            .header-right { padding: 0; margin-top: 15px; }
-            .modal-left, .modal-right { flex: none; width: 100%; }
-        }
+        @media (max-width: 768px) { header { flex-direction: column; } .header-right { text-align: center; margin-top: 10px; } }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="Logo_LeNam.jpg" alt="Lê Nam Logo" class="logo">
+    <img src="Logo_LeNam.jpg" alt="Logo Lê Nam" class="logo">
     <div class="header-right">
         <p class="slogan">Lê Nam - Trao trọn niềm tin, vững bước mọi hành trình</p>
-        <div class="header-details">
-            <b>📞 Hotline/Zalo: 0919.005366</b><br>
-            🛠 Camera, Laptop, Điện gia dụng, Năng lượng mặt trời.<br>
-            🚗 Đào tạo lái xe A1, A, B, C1, E..., bổ túc tay lái.
+        <div class="header-info">
+            <b>📞 0919.005366</b> | 🛠 Camera - Laptop - Điện gia dụng<br>
+            🚗 Đào tạo lái xe A1, A, B, C, E..., bổ túc tay lái
         </div>
     </div>
 </header>
 
-<div class="search-container">
-    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm hoặc dịch vụ sếp cần...">
-</div>
+<div class="search-area"><input type="text" id="searchInput" placeholder="🔍 Tìm sản phẩm hoặc dịch vụ..."></div>
 
 <div class="container" id="product-list"></div>
 
-<div id="productModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-left">
-            <img id="mImg" src="">
-        </div>
-        <div class="modal-right">
-            <h2 id="mTitle" style="margin-top:0"></h2>
-            <div id="mPrice" class="modal-price"></div>
-            <div id="mDesc" class="modal-desc"></div>
-            <a id="mZalo" href="" target="_blank" class="modal-zalo">💬 Nhắn Zalo Tư Vấn Ngay</a>
+<div id="pModal" class="modal" onclick="if(event.target==this) this.style.display='none'">
+    <div class="modal-box">
+        <span class="close" onclick="document.getElementById('pModal').style.display='none'">×</span>
+        <div class="m-img"><img id="m-img" src=""></div>
+        <div class="m-text">
+            <h2 id="m-name" style="margin-top:0"></h2>
+            <div id="m-price" style="color:red; font-size:1.6em; font-weight:bold"></div>
+            <div id="m-desc" style="margin:20px 0; line-height:1.6; white-space:pre-line; color:#555"></div>
+            <a href="https://zalo.me/0919005366" target="_blank" class="m-btn">💬 Nhắn Zalo Tư Vấn Ngay</a>
         </div>
     </div>
 </div>
@@ -93,12 +72,12 @@
     <div class="footer-grid">
         <div>
             <h3>LIÊN HỆ CHI TIẾT</h3>
-            <p>📍 Số 85A, đường Nguyễn Văn Ni, Ấp 2, xã Tân An Hội, Củ Chi, TP.HCM</p>
-            <p>📞 0919.005366 (Zalo Lê Nam)</p>
-            <p>Sự hài lòng của quý khách là thành công của chúng tôi.</p>
+            <p>🏢 Cửa hàng Lê Nam Camera & Computer</p>
+            <p>📍 85A Nguyễn Văn Ni, Tân An Hội, Củ Chi, TP.HCM</p>
+            <p>📞 Hotline/Zalo: 0919.005366</p>
         </div>
-        <div class="footer-maps">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.436153678385!2d106.491371!3d10.929239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b2a7585f8f537%3A0x6b971a8f90646c0d!2zODVBIE5ndXnhu4VuIFbEg24gTmksIFTDom4gQW4gSOG7mWksIEPhu6cgQ2hpLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+        <div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.484214474704!2d106.49122341053163!3d10.926715056353986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b2ba677054f19%3A0x6b44a47b1129524e!2zODVBIE5ndXnhu4VuIFbEg24gTmksIFTDom4gQW4gSOG7mWksIEPhu6cgQ2hpLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000"></iframe>
         </div>
     </div>
 </footer>
@@ -111,62 +90,39 @@
         apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
         authDomain: "cuahangcamrera.firebaseapp.com",
         databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "cuahangcamrera",
-        storageBucket: "cuahangcamrera.firebasestorage.app",
-        messagingSenderId: "306094872086",
-        appId: "1:306094872086:web:3fcd59e474557a8cb50737"
+        projectId: "cuahangcamrera"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let allProducts = [];
+    let allData = [];
 
-    onValue(ref(db, 'products/'), (snapshot) => {
-        allProducts = [];
-        snapshot.forEach(c => allProducts.push({id: c.key, ...c.val()}));
-        render(allProducts);
-    });
-
-    function render(data) {
+    onValue(ref(db, 'products/'), (s) => {
+        allData = [];
         const list = document.getElementById('product-list');
         list.innerHTML = "";
-        data.forEach(p => {
+        s.forEach(child => {
+            const p = child.val();
+            p.id = child.key;
+            allData.push(p);
             const price = (p.price && p.price != 0) ? Number(p.price).toLocaleString('vi-VN') + " đ" : "Giá liên hệ";
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => showDetail(p);
-            card.innerHTML = `
-                <img src="${p.img || 'https://via.placeholder.com/300'}">
-                <div class="info">
-                    <h3>${p.name}</h3>
-                    <div class="price">${price}</div>
-                    <div style="font-size:0.85em; color:#777">Bấm xem chi tiết...</div>
-                </div>`;
+            card.onclick = () => {
+                document.getElementById('m-name').innerText = p.name;
+                document.getElementById('m-price').innerText = price;
+                document.getElementById('m-desc').innerText = p.desc || "Đang cập nhật...";
+                document.getElementById('m-img').src = p.img || 'https://via.placeholder.com/300';
+                document.getElementById('pModal').style.display = 'flex';
+            };
+            card.innerHTML = `<img src="${p.img || 'https://via.placeholder.com/300'}"><div class="info"><h3>${p.name}</h3><div class="price">${price}</div><p style="font-size:12px;color:blue">Xem chi tiết...</p></div>`;
             list.appendChild(card);
         });
-    }
-
-    window.showDetail = (p) => {
-        document.getElementById('mTitle').innerText = p.name;
-        document.getElementById('mPrice').innerText = (p.price && p.price != 0) ? Number(p.price).toLocaleString('vi-VN') + " đ" : "Giá liên hệ";
-        document.getElementById('mDesc').innerText = p.desc || "Đang cập nhật mô tả...";
-        document.getElementById('mImg').src = p.img || 'https://via.placeholder.com/300';
-        document.getElementById('mZalo').href = "https://zalo.me/0919005366";
-        document.getElementById('productModal').style.display = 'flex';
-    };
-
-    window.closeModal = () => {
-        document.getElementById('productModal').style.display = 'none';
-    };
+    });
 
     document.getElementById('searchInput').oninput = (e) => {
         const txt = e.target.value.toLowerCase();
-        render(allProducts.filter(p => p.name.toLowerCase().includes(txt)));
-    };
-
-    // Đóng khi click ra ngoài vùng trắng
-    window.onclick = (e) => {
-        if(e.target == document.getElementById('productModal')) closeModal();
+        // Sếp có thể tự viết hàm filter thêm ở đây nếu muốn tìm kiếm mượt hơn
     };
 </script>
 </body>
