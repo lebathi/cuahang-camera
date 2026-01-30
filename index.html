@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lê Nam - Camera & Đào Tạo Lái Xe</title>
+    <title>Lê Nam - Camera, Computer & Đào Tạo Lái Xe</title>
     <style>
-        :root { --primary: #0033a0; --price: #d32f2f; --dark: #1a252f; --text: #333; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8f9fa; margin: 0; color: var(--text); }
+        :root { --primary: #0033a0; --accent: #f39c12; --price: #d32f2f; --dark: #1a252f; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8f9fa; margin: 0; color: #333; }
         
-        /* Header mới: Logo trái - Slogan phải */
+        /* Header Nâng Cấp: Logo trái - Thông tin & Slogan phải */
         header { 
             background: white; 
             padding: 15px 5%; 
@@ -16,59 +16,45 @@
             justify-content: space-between; 
             align-items: center; 
             box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
         .header-left { display: flex; align-items: center; }
-        .logo { height: 80px; width: auto; transition: 0.3s; }
-        .header-right { text-align: right; }
-        .slogan { 
-            font-size: 1.2em; 
-            color: var(--primary); 
-            font-weight: bold; 
-            font-style: italic;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .sub-slogan { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .logo { height: 100px; width: auto; }
+        
+        .header-right { text-align: right; max-width: 70%; }
+        .slogan { font-size: 1.4em; color: var(--primary); font-weight: bold; margin: 0; text-transform: uppercase; }
+        .header-info-top { font-size: 0.95em; color: #444; margin-top: 5px; line-height: 1.6; }
+        .hotline-header { color: var(--price); font-weight: bold; font-size: 1.1em; }
 
-        /* Tìm kiếm */
-        .search-container { background: var(--primary); padding: 40px 20px; text-align: center; }
-        .search-box { max-width: 600px; margin: auto; position: relative; }
+        /* Thanh Tìm kiếm */
+        .search-container { background: var(--primary); padding: 30px 20px; text-align: center; }
+        .search-box { max-width: 650px; margin: auto; }
         #searchInput { 
-            width: 100%; 
-            padding: 15px 25px; 
-            border-radius: 30px; 
-            border: none; 
-            font-size: 16px; 
-            outline: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            width: 100%; padding: 12px 25px; border-radius: 30px; border: none; 
+            font-size: 16px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         /* Danh sách sản phẩm */
-        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1300px; margin: 30px auto; padding: 0 15px; min-height: 400px; }
-        .card { background: white; width: 280px; margin: 15px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1300px; margin: 20px auto; padding: 0 15px; }
+        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .card img { width: 100%; height: 220px; object-fit: cover; }
-        .info { padding: 20px; }
-        .info h3 { margin: 0; font-size: 1.1em; color: #222; height: 50px; overflow: hidden; line-height: 1.4; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.4em; margin: 15px 0; }
-        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 12px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        .info { padding: 15px; }
+        .info h3 { margin: 0; font-size: 1.05em; color: #222; height: 45px; overflow: hidden; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+        .zalo-btn { display: block; background: var(--primary); color: white; text-align: center; padding: 10px; text-decoration: none; border-radius: 8px; font-weight: bold; }
 
         /* Footer & Google Maps */
-        footer { background: var(--dark); color: #ecf0f1; padding: 60px 5% 20px; margin-top: 50px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; max-width: 1200px; margin: auto; }
-        .footer-info h3 { color: #3498db; border-left: 5px solid #3498db; padding-left: 15px; margin-bottom: 25px; text-transform: uppercase; }
-        .footer-info p { line-height: 1.8; margin: 12px 0; font-size: 1em; }
-        .footer-maps { height: 350px; border-radius: 15px; overflow: hidden; border: 3px solid #34495e; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        
-        @media (max-width: 768px) {
+        footer { background: var(--dark); color: #ecf0f1; padding: 40px 5%; margin-top: 50px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; }
+        .footer-info h3 { color: #3498db; border-left: 5px solid #3498db; padding-left: 15px; margin-bottom: 20px; }
+        .footer-maps { height: 350px; border-radius: 15px; overflow: hidden; border: 3px solid #34495e; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        @media (max-width: 992px) {
             header { flex-direction: column; text-align: center; }
-            .header-right { text-align: center; margin-top: 15px; }
-            .logo { height: 60px; }
-            .slogan { font-size: 1em; }
+            .header-right { text-align: center; margin-top: 15px; max-width: 100%; }
+            .logo { height: 80px; }
         }
     </style>
 </head>
@@ -80,35 +66,37 @@
     </div>
     <div class="header-right">
         <p class="slogan">Lê Nam Camera & Computer</p>
-        <p class="sub-slogan">Trao trọn niềm tin - Vững bước mọi hành trình</p>
+        <div class="header-info-top">
+            <span class="hotline-header">📞 Hotline/Zalo: 0919.005366</span><br>
+            🛠 <b>Chuyên:</b> Camera, Máy tính, Laptop, Điện gia dụng, Năng lượng mặt trời.<br>
+            🚗 <b>Đào tạo:</b> Hồ sơ lái xe A1, A, B, C1, E..., bổ túc tay lái.
+        </div>
     </div>
 </header>
 
 <div class="search-container">
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Bạn đang tìm sản phẩm hay khóa học lái xe?">
+        <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm hoặc dịch vụ sếp cần...">
     </div>
 </div>
 
 <div class="container" id="product-list">
-    <p style="text-align: center; width: 100%;">Đang kết nối dữ liệu...</p>
+    <p>Đang tải dữ liệu...</p>
 </div>
 
 <footer>
     <div class="footer-grid">
         <div class="footer-info">
-            <h3>THÔNG TIN LIÊN HỆ</h3>
-            <p><strong>🏢 Cửa hàng:</strong> Lê Nam Camera & Computer</p>
+            <h3>THÔNG TIN CHI TIẾT</h3>
+            <p><strong>🏢 Tên đơn vị:</strong> Cửa hàng Lê Nam</p>
             <p><strong>📍 Địa chỉ:</strong> Số 85A, đường Nguyễn Văn Ni, Ấp 2, xã Tân An Hội, Củ Chi, TP.HCM</p>
-            <p><strong>📞 Hotline/Zalo:</strong> 0919.005366</p>
-            <p><strong>🛠 Chuyên:</strong> Camera, Máy tính, Laptop, Điện gia dụng, Năng lượng mặt trời.</p>
-            <p><strong>🚗 Đào tạo:</strong> Hồ sơ thi lái xe A1, A, B, C1, E..., bổ túc tay lái.</p>
+            <p><strong>🕒 Giờ làm việc:</strong> Tinh thần phục vụ tận tâm, uy tín.</p>
+            <p><i>Lê Nam - Trao trọn niềm tin, vững bước mọi hành trình.</i></p>
         </div>
         <div class="footer-maps">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.476483669675!2d106.4950!3d10.9250!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDU1JzMwLjAiTiAxMDbCsDI5JzQyLjAiRQ!5e0!3m2!1svi!2svn!4v1700000000000!5m2!1svi!2svn" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.4764831613583!2d106.49081517586616!3d10.927376356391493!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b2b8006e8b919%3A0xc6c42171171887e4!2zODVBIOCChuG7oW5nIE5ndXnhu4VuIFbEg24gTmksIFTDom4gQW4gSOG7mWksIEPhu6cgQ2hpLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1715830000000!5m2!1svi!2s" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </div>
-    <p style="text-align:center; margin-top:50px; opacity:0.5; font-size: 0.8em;">© 2026 Lê Nam. Bản quyền thuộc về Cửa hàng Lê Nam.</p>
 </footer>
 
 <script type="module">
@@ -149,7 +137,7 @@
                     <div class="info">
                         <h3>${p.name}</h3>
                         <div class="price">${displayPrice}</div>
-                        <a href="https://zalo.me/${p.zalo || '0919005366'}" target="_blank" class="zalo-btn">💬 Tư vấn qua Zalo</a>
+                        <a href="https://zalo.me/${p.zalo || '0919005366'}" target="_blank" class="zalo-btn">💬 Tư vấn Zalo</a>
                     </div>
                 </div>`;
         });
