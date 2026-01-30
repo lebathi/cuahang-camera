@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -9,66 +9,71 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; }
         
         /* HEADER */
-        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { height: 100px; width: auto; } /* Giữ chiều cao logo ổn định */
+        header { 
+            background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; 
+        }
+        .logo { height: 90px; width: auto; object-fit: contain; }
         .header-right { text-align: right; }
-        .slogan { font-size: 1.5em; color: var(--primary); font-weight: 800; margin: 0; text-transform: uppercase; }
+        .slogan { font-size: 1.4em; color: var(--primary); font-weight: 800; margin: 0; text-transform: uppercase; }
         .header-info { font-size: 0.9em; margin-top: 5px; color: #444; line-height: 1.5; }
 
-        /* THANH TÌM KIẾM */
-        .search-area { background: var(--primary); padding: 30px 20px; text-align: center; }
-        #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; font-size: 16px; outline: none; }
+        /* SEARCH */
+        .search-area { background: var(--primary); padding: 25px 20px; text-align: center; }
+        #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; font-size: 16px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
         /* DANH SÁCH SẢN PHẨM */
         .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1300px; margin: auto; }
-        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; border: 1px solid #eee; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        
-        /* --- CHỈNH SỬA ẢNH KHÔNG ĐỂ 100% --- */
-        .card img { 
-            width: auto;           /* Tự động theo tỉ lệ ảnh gốc */
-            max-width: 95%;        /* Không bao giờ vượt quá chiều ngang thẻ */
-            height: 220px;         /* Chiều cao cố định để các ô đều nhau */
-            object-fit: contain;   /* Hiển thị trọn vẹn ảnh, không bị cắt */
-            display: block;        /* Để căn giữa */
-            margin: 10px auto;     /* Căn giữa ảnh trong khung */
+        .card { 
+            background: white; 
+            width: 280px; 
+            margin: 15px; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            cursor: pointer; 
+            transition: 0.3s; 
+            border: 1px solid #eee; 
+            display: flex;             /* Dùng flex để canh chỉnh nội dung dọc */
+            flex-direction: column; 
         }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         
-        .info { padding: 15px; text-align: center; border-top: 1px solid #f0f0f0; }
-        .info h3 { margin: 0; font-size: 1.1em; height: 45px; overflow: hidden; color: #333; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin-top: 10px; }
+        /* --- CHỈNH SỬA ẢNH ĐỂ THẤY HẾT --- */
+        .card img { 
+            width: 100%;           /* Chiếm hết chiều ngang khung */
+            height: 220px;         /* Chiều cao cố định */
+            object-fit: contain;   /* QUAN TRỌNG: Thu nhỏ ảnh để vừa khít khung, KHÔNG CẮT ẢNH */
+            background: #fff;      /* Nền trắng cho những ảnh không vuông vức */
+            padding: 5px;          /* Khoảng hở nhỏ để ảnh không dính sát mép */
+            box-sizing: border-box;
+        }
 
-        /* MODAL POPUP (XEM CHI TIẾT) */
+        .info { padding: 15px; text-align: center; margin-top: auto; border-top: 1px solid #f9f9f9; }
+        .info h3 { margin: 0; font-size: 1.1em; height: 45px; overflow: hidden; color: #333; line-height: 1.4; }
+        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin: 10px 0; }
+        .click-hint { font-size: 12px; color: var(--primary); text-decoration: underline; margin-top: 5px; display: block; }
+
+        /* MODAL (POPUP) */
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: white; width: 100%; max-width: 900px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .modal-box { background: white; width: 100%; max-width: 900px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .close { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; z-index: 10; }
         
-        .m-img { flex: 1; min-width: 300px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .m-img img { 
-            width: auto; 
-            max-width: 100%; 
-            max-height: 400px; 
-            object-fit: contain; /* Ảnh chi tiết cũng không bị ép */
-        }
+        .m-img { flex: 1; min-width: 300px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 20px; border-right: 1px solid #eee; }
+        .m-img img { width: 100%; max-height: 400px; object-fit: contain; } /* Ảnh trong popup cũng không bị cắt */
         
-        .m-text { flex: 1; padding: 40px 30px; min-width: 300px; background: #fdfdfd; }
-        .m-desc { line-height: 1.6; color: #555; white-space: pre-line; margin: 20px 0; font-size: 15px; }
-        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; transition: 0.2s; }
-        .m-btn:hover { opacity: 0.9; }
+        .m-text { flex: 1.2; padding: 40px 30px; min-width: 300px; }
+        .m-desc { line-height: 1.6; color: #555; white-space: pre-line; margin: 20px 0; font-size: 15px; max-height: 300px; overflow-y: auto; }
+        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,51,160,0.3); }
+        .m-btn:hover { background: #00257a; transform: translateY(-2px); }
 
         /* FOOTER */
         footer { background: var(--dark); color: white; padding: 40px 5%; margin-top: 50px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; }
-        iframe { width: 100%; height: 300px; border: none; border-radius: 10px; margin-top: 15px; }
+        .footer-info p { margin: 10px 0; line-height: 1.5; }
+        iframe { width: 100%; height: 300px; border: none; border-radius: 10px; }
         
-        @media (max-width: 768px) { 
-            header { flex-direction: column; } 
-            .header-right { text-align: center; margin-top: 15px; }
-            .card { width: 45%; margin: 2.5%; } /* Trên điện thoại hiện 2 cột */
-        }
-        @media (max-width: 480px) {
-            .card { width: 100%; } /* Màn hình nhỏ quá thì hiện 1 cột */
-        }
+        @media (max-width: 768px) { header { flex-direction: column; text-align: center; } .header-right { margin-top: 15px; } .m-img { border-right: none; border-bottom: 1px solid #eee; } }
     </style>
 </head>
 <body>
@@ -85,11 +90,11 @@
 </header>
 
 <div class="search-area">
-    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm hoặc khóa học...">
+    <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm, dịch vụ...">
 </div>
 
 <div class="container" id="product-list">
-    <p style="text-align:center; width:100%">Đang tải dữ liệu từ cửa hàng...</p>
+    <p style="text-align:center; width:100%">Đang tải dữ liệu...</p>
 </div>
 
 <div id="pModal" class="modal" onclick="if(event.target==this) this.style.display='none'">
@@ -97,10 +102,10 @@
         <span class="close" onclick="document.getElementById('pModal').style.display='none'">×</span>
         <div class="m-img"><img id="m-img" src=""></div>
         <div class="m-text">
-            <h2 id="m-name" style="margin-top:0; color: #0033a0;"></h2>
+            <h2 id="m-name" style="margin-top:0; color:#0033a0;"></h2>
             <div id="m-price" style="color:red; font-size:1.8em; font-weight:bold; margin: 10px 0;"></div>
-            <hr style="border: 0; border-top: 1px solid #eee;">
-            <strong>Mô tả chi tiết:</strong>
+            <div style="height:1px; background:#eee; margin:15px 0;"></div>
+            <strong>Thông tin chi tiết:</strong>
             <div id="m-desc" class="m-desc"></div>
             <a href="https://zalo.me/0919005366" target="_blank" class="m-btn">💬 Nhắn Zalo Tư Vấn Ngay</a>
         </div>
@@ -109,15 +114,15 @@
 
 <footer>
     <div class="footer-grid">
-        <div>
-            <h3>LIÊN HỆ CHI TIẾT</h3>
+        <div class="footer-info">
+            <h3>LIÊN HỆ</h3>
             <p>🏢 <strong>Cửa hàng Lê Nam Camera & Computer</strong></p>
             <p>📍 85A Nguyễn Văn Ni, Tân An Hội, Củ Chi, TP.HCM</p>
             <p>📞 Hotline/Zalo: <strong>0919.005366</strong></p>
-            <p><i>Sự hài lòng của quý khách là thành công của chúng tôi.</i></p>
+            <p><i>Uy tín - Chất lượng - Tận tâm</i></p>
         </div>
         <div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.484214474704!2d106.49122341053163!3d10.926715056353986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b2ba677054f19%3A0x6b44a47b1129524e!2zODVBIE5ndXnhu4VuIFbEg24gTmksIFTDom4gQW4gSOG7mWksIEPhu6cgQ2hpLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000" loading="lazy"></iframe>
+            <iframe src="https://maps.google.com/maps?q=85A+Nguy%E1%BB%85n+V%C4%83n+Ni,+C%E1%BB%A7+Chi,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe>
         </div>
     </div>
 </footer>
@@ -137,13 +142,12 @@
     const db = getDatabase(app);
     let allData = [];
 
-    // Tự động tải dữ liệu và cập nhật giao diện
     onValue(ref(db, 'products/'), (snapshot) => {
         const list = document.getElementById('product-list');
         list.innerHTML = "";
         
         if (!snapshot.exists()) {
-            list.innerHTML = "<p style='text-align:center; width:100%; padding:20px'>Chưa có sản phẩm nào được đăng.</p>";
+            list.innerHTML = "<p style='text-align:center;width:100%'>Chưa có sản phẩm.</p>";
             return;
         }
 
@@ -158,171 +162,36 @@
 
             const card = document.createElement('div');
             card.className = 'card';
-            // Bấm vào thẻ là hiện modal
-            card.onclick = () => showModal(p, price, imgUrl);
+            card.onclick = () => {
+                document.getElementById('m-name').innerText = p.name;
+                document.getElementById('m-price').innerText = price;
+                document.getElementById('m-desc').innerText = p.desc || "Đang cập nhật...";
+                document.getElementById('m-img').src = imgUrl;
+                document.getElementById('pModal').style.display = 'flex';
+            };
             
             card.innerHTML = `
                 <img src="${imgUrl}" alt="${p.name}">
                 <div class="info">
                     <h3>${p.name}</h3>
                     <div class="price">${price}</div>
-                    <span style="font-size:12px; color:#0033a0; text-decoration:underline;">Bấm để xem chi tiết</span>
+                    <span class="click-hint">Bấm để xem chi tiết</span>
                 </div>
             `;
             list.appendChild(card);
         });
     });
 
-    // Hàm hiển thị Modal
-    function showModal(p, price, imgUrl) {
-        document.getElementById('m-name').innerText = p.name;
-        document.getElementById('m-price').innerText = price;
-        document.getElementById('m-desc').innerText = p.desc || "Đang cập nhật nội dung...";
-        document.getElementById('m-img').src = imgUrl;
-        document.getElementById('pModal').style.display = 'flex';
-    }
-
-    // Tìm kiếm
     document.getElementById('searchInput').oninput = (e) => {
         const txt = e.target.value.toLowerCase();
         const cards = document.querySelectorAll('.card');
         cards.forEach((card, index) => {
-            const name = allData[index].name.toLowerCase();
-            card.style.display = name.includes(txt) ? 'block' : 'none';
+            if(allData[index]) {
+                const name = allData[index].name.toLowerCase();
+                card.style.display = name.includes(txt) ? 'flex' : 'none';
+            }
         });
     };
 </script>
 </body>
 </html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lê Nam - Camera, Computer & Đào Tạo Lái Xe</title>
-    <style>
-        :root { --primary: #0033a0; --price: #d32f2f; --dark: #1a252f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; }
-        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { height: 100px; }
-        .header-right { text-align: right; }
-        .slogan { font-size: 1.5em; color: var(--primary); font-weight: 800; margin: 0; text-transform: uppercase; }
-        .header-info { font-size: 0.9em; margin-top: 5px; color: #444; line-height: 1.5; }
-
-        .search-area { background: var(--primary); padding: 20px 20px; text-align: center; }
-        #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; font-size: 16px; outline: none; }
-
-        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1300px; margin: auto; }
-        .card { background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img { width: 100%; height: 220px; object-fit: cover; }
-        .info { padding: 15px; }
-        .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin-top: 10px; }
-
-        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: white; width: 100%; max-width: 850px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; }
-        .close { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; color: #000; }
-        .m-img { flex: 1; min-width: 300px; }
-        .m-img img { width: 100%; height: 100%; object-fit: cover; }
-        .m-text { flex: 1; padding: 35px; min-width: 300px; }
-        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px; }
-
-        footer { background: var(--dark); color: white; padding: 40px 5%; margin-top: 50px; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; }
-        iframe { width: 100%; height: 300px; border: none; border-radius: 10px; margin-top: 15px; }
-
-        @media (max-width: 768px) { header { flex-direction: column; } .header-right { text-align: center; margin-top: 10px; } }
-    </style>
-</head>
-<body>
-
-<header>
-    <img src="Logo_LeNam.jpg" alt="Logo Lê Nam" class="logo">
-    <div class="header-right">
-        <p class="slogan">Lê Nam - Trao trọn niềm tin, vững bước mọi hành trình</p>
-        <div class="header-info">
-            <b>📞 0919.005.366</b> | 🛠 Camera - Laptop - Điện gia dụng<br>
-            🚗 Đào tạo lái xe A1, A, B, C, E..., bổ túc tay lái
-        </div>
-    </div>
-</header>
-
-<div class="search-area"><input type="text" id="searchInput" placeholder="🔍 Tìm sản phẩm hoặc dịch vụ..."></div>
-
-<div class="container" id="product-list"></div>
-
-<div id="pModal" class="modal" onclick="if(event.target==this) this.style.display='none'">
-    <div class="modal-box">
-        <span class="close" onclick="document.getElementById('pModal').style.display='none'">×</span>
-        <div class="m-img"><img id="m-img" src=""></div>
-        <div class="m-text">
-            <h2 id="m-name" style="margin-top:0"></h2>
-            <div id="m-price" style="color:red; font-size:1.6em; font-weight:bold"></div>
-            <div id="m-desc" style="margin:20px 0; line-height:1.6; white-space:pre-line; color:#555"></div>
-            <a href="https://zalo.me/0919005366" target="_blank" class="m-btn">💬 Nhắn Zalo Tư Vấn Ngay</a>
-        </div>
-    </div>
-</div>
-
-<footer>
-    <div class="footer-grid">
-        <div>
-            <h3>LIÊN HỆ CHI TIẾT</h3>
-            <p>🏢 Cửa hàng Lê Nam Camera & Computer</p>
-            <p>📍 Số 85A, đường Nguyễn Văn Ni, ấp 2, xã Tân An Hội, TP.HCM</p>
-            <p>📞 Hotline/Zalo: 0919.005.366</p>
-        </div>
-        <div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.484214474704!2d106.49122341053163!3d10.926715056353986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310b2ba677054f19%3A0x6b44a47b1129524e!2zODVBIE5ndXnhu4VuIFbEg24gTmksIFTDom4gQW4gSOG7mWksIEPhu6cgQ2hpLCBUaMOgbmggcGjhu5EgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000"></iframe>
-        </div>
-    </div>
-</footer>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
-        authDomain: "cuahangcamrera.firebaseapp.com",
-        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "cuahangcamrera"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    let allData = [];
-
-    onValue(ref(db, 'products/'), (s) => {
-        allData = [];
-        const list = document.getElementById('product-list');
-        list.innerHTML = "";
-        s.forEach(child => {
-            const p = child.val();
-            p.id = child.key;
-            allData.push(p);
-            const price = (p.price && p.price != 0) ? Number(p.price).toLocaleString('vi-VN') + " đ" : "Giá liên hệ";
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => {
-                document.getElementById('m-name').innerText = p.name;
-                document.getElementById('m-price').innerText = price;
-                document.getElementById('m-desc').innerText = p.desc || "Đang cập nhật...";
-                document.getElementById('m-img').src = p.img || 'https://via.placeholder.com/300';
-                document.getElementById('pModal').style.display = 'flex';
-            };
-            card.innerHTML = `<img src="${p.img || 'https://via.placeholder.com/300'}"><div class="info"><h3>${p.name}</h3><div class="price">${price}</div><p style="font-size:12px;color:blue">Xem chi tiết...</p></div>`;
-            list.appendChild(card);
-        });
-    });
-
-    document.getElementById('searchInput').oninput = (e) => {
-        const txt = e.target.value.toLowerCase();
-        // Sếp có thể tự viết hàm filter thêm ở đây nếu muốn tìm kiếm mượt hơn
-    };
-</script>
-</body>
-</html>
-
-
-
-
