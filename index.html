@@ -8,72 +8,51 @@
         :root { --primary: #0033a0; --price: #d32f2f; --dark: #1a252f; }
         body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; }
         
-        /* HEADER */
-        header { 
-            background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; 
-        }
+        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { height: 90px; width: auto; object-fit: contain; }
         .header-right { text-align: right; }
         .slogan { font-size: 1.4em; color: var(--primary); font-weight: 800; margin: 0; text-transform: uppercase; }
         .header-info { font-size: 0.9em; margin-top: 5px; color: #444; line-height: 1.5; }
 
-        /* SEARCH */
-        .search-area { background: var(--primary); padding: 25px 20px; text-align: center; }
+        .search-area { background: var(--primary); padding: 20px; text-align: center; }
         #searchInput { width: 100%; max-width: 600px; padding: 12px 25px; border-radius: 30px; border: none; font-size: 16px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
+        /* --- MENU PHÂN LOẠI (FILTER) --- */
+        .category-bar { display: flex; justify-content: center; gap: 10px; padding: 15px; background: white; flex-wrap: wrap; border-bottom: 1px solid #eee; }
+        .filter-btn { 
+            padding: 8px 20px; border: 1px solid #ddd; background: white; border-radius: 20px; cursor: pointer; 
+            font-weight: 600; color: #555; transition: 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
         /* DANH SÁCH SẢN PHẨM */
-        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1300px; margin: auto; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; max-width: 1300px; margin: auto; min-height: 400px; }
         .card { 
-            background: white; 
-            width: 280px; 
-            margin: 15px; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-            cursor: pointer; 
-            transition: 0.3s; 
-            border: 1px solid #eee; 
-            display: flex;             /* Dùng flex để canh chỉnh nội dung dọc */
-            flex-direction: column; 
+            background: white; width: 280px; margin: 15px; border-radius: 12px; overflow: hidden; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; border: 1px solid #eee; 
+            display: flex; flex-direction: column;
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        
-        /* --- CHỈNH SỬA ẢNH ĐỂ THẤY HẾT --- */
-        .card img { 
-            width: 100%;           /* Chiếm hết chiều ngang khung */
-            height: 220px;         /* Chiều cao cố định */
-            object-fit: contain;   /* QUAN TRỌNG: Thu nhỏ ảnh để vừa khít khung, KHÔNG CẮT ẢNH */
-            background: #fff;      /* Nền trắng cho những ảnh không vuông vức */
-            padding: 5px;          /* Khoảng hở nhỏ để ảnh không dính sát mép */
-            box-sizing: border-box;
-        }
+        .card img { width: 100%; height: 220px; object-fit: contain; background: #fff; padding: 5px; box-sizing: border-box; }
 
         .info { padding: 15px; text-align: center; margin-top: auto; border-top: 1px solid #f9f9f9; }
         .info h3 { margin: 0; font-size: 1.1em; height: 45px; overflow: hidden; color: #333; line-height: 1.4; }
         .price { color: var(--price); font-weight: bold; font-size: 1.3em; margin: 10px 0; }
-        .click-hint { font-size: 12px; color: var(--primary); text-decoration: underline; margin-top: 5px; display: block; }
 
-        /* MODAL (POPUP) */
+        /* MODAL */
         .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: white; width: 100%; max-width: 900px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .close { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; z-index: 10; }
-        
-        .m-img { flex: 1; min-width: 300px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 20px; border-right: 1px solid #eee; }
-        .m-img img { width: 100%; max-height: 400px; object-fit: contain; } /* Ảnh trong popup cũng không bị cắt */
-        
+        .modal-box { background: white; width: 100%; max-width: 900px; border-radius: 15px; display: flex; flex-wrap: wrap; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close { position: absolute; top: 10px; right: 20px; font-size: 40px; cursor: pointer; color: #333; }
+        .m-img { flex: 1; min-width: 300px; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .m-img img { width: 100%; max-height: 400px; object-fit: contain; }
         .m-text { flex: 1.2; padding: 40px 30px; min-width: 300px; }
-        .m-desc { line-height: 1.6; color: #555; white-space: pre-line; margin: 20px 0; font-size: 15px; max-height: 300px; overflow-y: auto; }
-        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,51,160,0.3); }
-        .m-btn:hover { background: #00257a; transform: translateY(-2px); }
+        .m-btn { background: var(--primary); color: white; display: block; text-align: center; padding: 15px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; }
 
-        /* FOOTER */
         footer { background: var(--dark); color: white; padding: 40px 5%; margin-top: 50px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: auto; }
-        .footer-info p { margin: 10px 0; line-height: 1.5; }
         iframe { width: 100%; height: 300px; border: none; border-radius: 10px; }
         
-        @media (max-width: 768px) { header { flex-direction: column; text-align: center; } .header-right { margin-top: 15px; } .m-img { border-right: none; border-bottom: 1px solid #eee; } }
+        @media (max-width: 768px) { header { flex-direction: column; text-align: center; } .header-right { margin-top: 15px; } }
     </style>
 </head>
 <body>
@@ -84,13 +63,21 @@
         <p class="slogan">Lê Nam - Trao trọn niềm tin, vững bước mọi hành trình</p>
         <div class="header-info">
             <b>📞 0919.005366</b> | 🛠 Camera - Laptop - Điện gia dụng<br>
-            🚗 Đào tạo lái xe A1, A, B, C, E..., bổ túc tay lái
+            🚗 Đào tạo lái xe A1, A, B, C, E...
         </div>
     </div>
 </header>
 
 <div class="search-area">
     <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm sản phẩm, dịch vụ...">
+</div>
+
+<div class="category-bar">
+    <button class="filter-btn active" onclick="filter('all', this)">Tất cả</button>
+    <button class="filter-btn" onclick="filter('camera', this)">📷 Camera</button>
+    <button class="filter-btn" onclick="filter('computer', this)">💻 Laptop/PC</button>
+    <button class="filter-btn" onclick="filter('solar', this)">☀️ Điện Năng Lượng</button>
+    <button class="filter-btn" onclick="filter('driving', this)">🚗 Đào Tạo Lái Xe</button>
 </div>
 
 <div class="container" id="product-list">
@@ -104,9 +91,8 @@
         <div class="m-text">
             <h2 id="m-name" style="margin-top:0; color:#0033a0;"></h2>
             <div id="m-price" style="color:red; font-size:1.8em; font-weight:bold; margin: 10px 0;"></div>
-            <div style="height:1px; background:#eee; margin:15px 0;"></div>
-            <strong>Thông tin chi tiết:</strong>
-            <div id="m-desc" class="m-desc"></div>
+            <hr>
+            <div id="m-desc" style="white-space:pre-line; color:#555; line-height:1.6"></div>
             <a href="https://zalo.me/0919005366" target="_blank" class="m-btn">💬 Nhắn Zalo Tư Vấn Ngay</a>
         </div>
     </div>
@@ -114,16 +100,13 @@
 
 <footer>
     <div class="footer-grid">
-        <div class="footer-info">
+        <div>
             <h3>LIÊN HỆ</h3>
             <p>🏢 <strong>Cửa hàng Lê Nam Camera & Computer</strong></p>
             <p>📍 85A Nguyễn Văn Ni, Tân An Hội, Củ Chi, TP.HCM</p>
             <p>📞 Hotline/Zalo: <strong>0919.005366</strong></p>
-            <p><i>Uy tín - Chất lượng - Tận tâm</i></p>
         </div>
-        <div>
-            <iframe src="https://maps.google.com/maps?q=85A+Nguy%E1%BB%85n+V%C4%83n+Ni,+C%E1%BB%A7+Chi,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe>
-        </div>
+        <div><iframe src="https://maps.google.com/maps?q=85A+Nguy%E1%BB%85n+V%C4%83n+Ni,+C%E1%BB%A7+Chi,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=15&ie=UTF8&iwloc=&output=embed" loading="lazy"></iframe></div>
     </div>
 </footer>
 
@@ -131,66 +114,59 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
-        authDomain: "cuahangcamrera.firebaseapp.com",
-        databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "cuahangcamrera"
-    };
-
-    const app = initializeApp(firebaseConfig);
+    const config = { apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU", authDomain: "cuahangcamrera.firebaseapp.com", databaseURL: "https://cuahangcamrera-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "cuahangcamrera" };
+    const app = initializeApp(config);
     const db = getDatabase(app);
     let allData = [];
+    let currentCat = 'all';
 
-    onValue(ref(db, 'products/'), (snapshot) => {
+    onValue(ref(db, 'products/'), (s) => {
+        allData = [];
+        if(s.exists()) s.forEach(c => { const p = c.val(); p.id = c.key; allData.push(p); });
+        render(allData);
+    });
+
+    function render(data) {
         const list = document.getElementById('product-list');
         list.innerHTML = "";
+        if(data.length === 0) { list.innerHTML = "<p>Không tìm thấy sản phẩm nào.</p>"; return; }
         
-        if (!snapshot.exists()) {
-            list.innerHTML = "<p style='text-align:center;width:100%'>Chưa có sản phẩm.</p>";
-            return;
-        }
-
-        allData = [];
-        snapshot.forEach(child => {
-            const p = child.val();
-            p.id = child.key;
-            allData.push(p);
-
+        data.forEach(p => {
             const price = (p.price && p.price != 0) ? Number(p.price).toLocaleString('vi-VN') + " đ" : "Giá liên hệ";
             const imgUrl = p.img || 'https://via.placeholder.com/300?text=No+Image';
-
+            
             const card = document.createElement('div');
             card.className = 'card';
             card.onclick = () => {
                 document.getElementById('m-name').innerText = p.name;
                 document.getElementById('m-price').innerText = price;
-                document.getElementById('m-desc').innerText = p.desc || "Đang cập nhật...";
+                document.getElementById('m-desc').innerText = p.desc || "";
                 document.getElementById('m-img').src = imgUrl;
                 document.getElementById('pModal').style.display = 'flex';
             };
-            
-            card.innerHTML = `
-                <img src="${imgUrl}" alt="${p.name}">
-                <div class="info">
-                    <h3>${p.name}</h3>
-                    <div class="price">${price}</div>
-                    <span class="click-hint">Bấm để xem chi tiết</span>
-                </div>
-            `;
+            card.innerHTML = `<img src="${imgUrl}"><div class="info"><h3>${p.name}</h3><div class="price">${price}</div><span style="font-size:12px;color:#0033a0">Xem chi tiết</span></div>`;
             list.appendChild(card);
         });
-    });
+    }
 
+    // Hàm lọc theo danh mục
+    window.filter = (cat, btn) => {
+        currentCat = cat;
+        // Đổi màu nút
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Lọc dữ liệu
+        if(cat === 'all') render(allData);
+        else render(allData.filter(p => p.category === cat));
+    };
+
+    // Tìm kiếm
     document.getElementById('searchInput').oninput = (e) => {
         const txt = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.card');
-        cards.forEach((card, index) => {
-            if(allData[index]) {
-                const name = allData[index].name.toLowerCase();
-                card.style.display = name.includes(txt) ? 'flex' : 'none';
-            }
-        });
+        let filtered = allData.filter(p => p.name.toLowerCase().includes(txt));
+        if(currentCat !== 'all') filtered = filtered.filter(p => p.category === currentCat);
+        render(filtered);
     };
 </script>
 </body>
