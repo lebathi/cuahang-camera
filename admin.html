@@ -3,47 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị Lê Nam</title>
+    <title>Quản trị Kinh Doanh Lê Nam</title>
     <style>
-        body { font-family: sans-serif; background: #2c3e50; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .box { background: white; padding: 25px; border-radius: 12px; width: 100%; max-width: 500px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-update { background: #f39c12 !important; }
-        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: white; margin-bottom: 5px; border-radius: 8px; width: 100%; max-width: 500px; }
-        .btn-s { background: #3498db; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; }
-        .btn-x { background: #e74c3c; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
-        .hidden { display: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: #ecf0f1; margin: 0; padding: 20px; color: #333; }
+        
+        /* LOGIN STYLE */
+        #login-form { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #bdc3c7; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
+        button { cursor: pointer; padding: 12px; border: none; border-radius: 5px; font-weight: bold; transition: 0.3s; width: 100%; margin-top: 10px; }
+        .btn-login { background: #2c3e50; color: white; }
+        
+        /* ADMIN PANEL STYLE */
+        .container { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h2 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; display: inline-block; }
+        
+        /* Form inputs */
+        .form-group label { font-weight: bold; font-size: 13px; color: #7f8c8d; display: block; margin-top: 10px; }
+        .btn-save { background: #27ae60; color: white; font-size: 16px; }
+        .btn-save:hover { background: #219150; }
+        .btn-cancel { background: #95a5a6; color: white; }
+        .btn-update-mode { background: #f39c12 !important; color: white !important; }
+
+        /* Table Style */
+        .search-bar { margin-bottom: 15px; position: relative; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th { background: #34495e; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        .price-in { color: #c0392b; font-weight: bold; } /* Giá nhập màu đỏ */
+        .price-out { color: #27ae60; font-weight: bold; } /* Giá bán màu xanh */
+        .profit { color: #2980b9; font-weight: bold; } /* Lợi nhuận màu xanh dương */
+        
+        .action-btns { display: flex; gap: 5px; }
+        .btn-mini { padding: 5px 10px; font-size: 12px; width: auto; margin: 0; }
+        .btn-edit { background: #3498db; color: white; }
+        .btn-del { background: #e74c3c; color: white; }
+
+        .hidden { display: none !important; }
+        
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid #ccc; margin-bottom: 10px; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+            td { border: none; position: relative; padding-left: 40%; text-align: right; }
+            td:before { position: absolute; top: 10px; left: 10px; width: 45%; padding-right: 10px; white-space: nowrap; text-align: left; font-weight: bold; content: attr(data-label); color: #7f8c8d; }
+            .action-btns { justify-content: flex-end; }
+        }
     </style>
 </head>
 <body>
 
-<div id="login-form" class="box">
-    <h2>🔑 QUẢN TRỊ LÊ NAM</h2>
-    <input type="email" id="email" placeholder="Email đăng nhập">
-    <input type="password" id="pass" placeholder="Mật khẩu">
-    <button onclick="login()">ĐĂNG NHẬP</button>
+<div id="login-section">
+    <div id="login-form">
+        <h2>QUẢN LÝ LÊ NAM</h2>
+        <input type="email" id="email" placeholder="Email quản trị">
+        <input type="password" id="pass" placeholder="Mật khẩu">
+        <button class="btn-login" onclick="login()">ĐĂNG NHẬP HỆ THỐNG</button>
+    </div>
 </div>
 
-<div id="admin-content" class="box hidden">
-    <h2 id="title">Thêm Sản Phẩm Mới</h2>
-    <input type="hidden" id="edit-id" value="">
-    <input type="text" id="name" placeholder="Tên sản phẩm">
-    <input type="text" id="price" placeholder="Giá (Chỉ nhập số, ví dụ: 850000)" oninput="format(this)">
-    <textarea id="desc" rows="3" placeholder="Mô tả chi tiết sản phẩm"></textarea>
-    <input type="text" id="img" placeholder="Link ảnh sản phẩm">
-    <p style="color: green; font-weight: bold; font-size: 13px;">✅ Hotline/Zalo mặc định: 0919005366</p>
-    <button id="btn-save" onclick="save()">ĐĂNG BÀI LÊN TRANG CHỦ</button>
-    <button style="background:#95a5a6; margin-top:10px" onclick="location.reload()">LÀM MỚI / THOÁT</button>
-</div>
+<div id="admin-section" class="container hidden">
+    
+    <div class="box">
+        <h2 id="form-title">Thêm Sản Phẩm / Dịch Vụ</h2>
+        <input type="hidden" id="edit-id">
+        
+        <div class="form-group">
+            <label>Tên sản phẩm / Khóa học:</label>
+            <input type="text" id="name" placeholder="VD: Camera Imou A42...">
+        </div>
 
-<div id="list" class="hidden"></div>
+        <div class="form-group" style="display:flex; gap:10px">
+            <div style="flex:1">
+                <label>Giá Nhập (Vốn):</label>
+                <input type="text" id="originalPrice" placeholder="0" oninput="format(this)" style="color:#c0392b; font-weight:bold">
+            </div>
+            <div style="flex:1">
+                <label>Giá Bán (Công khai):</label>
+                <input type="text" id="price" placeholder="0" oninput="format(this)" style="color:#27ae60; font-weight:bold">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Link Ảnh:</label>
+            <input type="text" id="img" placeholder="Dán link ảnh vào đây">
+        </div>
+
+        <div class="form-group">
+            <label>Mô tả chi tiết:</label>
+            <textarea id="desc" rows="5" placeholder="Thông số kỹ thuật, nội dung khóa học..."></textarea>
+        </div>
+
+        <p style="font-size:12px; color:green">✅ Zalo liên hệ mặc định: 0919.005366</p>
+        
+        <button id="btn-save" class="btn-save" onclick="save()">LƯU SẢN PHẨM</button>
+        <button class="btn-cancel" onclick="resetForm()">LÀM MỚI FORM</button>
+    </div>
+
+    <div class="box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+            <h2>Kho Hàng & Dịch Vụ</h2>
+            <button onclick="logout()" style="width:auto; background:#95a5a6; color:white; padding:5px 15px; margin:0">Đăng Xuất</button>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="searchAdmin" placeholder="🔍 Tìm nhanh tên sản phẩm..." oninput="filterList()">
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Giá Vốn</th>
+                        <th>Giá Bán</th>
+                        <th>Lợi Nhuận</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="list-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const config = {
         apiKey: "AIzaSyAGheG_3iJiNRO5eqQXq2l1EIU2LROJmzU",
@@ -55,71 +146,149 @@
     const app = initializeApp(config);
     const db = getDatabase(app);
     const auth = getAuth(app);
+    let allProducts = [];
 
+    // --- CÁC HÀM XỬ LÝ GIAO DIỆN ---
     window.format = (i) => {
         let v = i.value.replace(/\D/g, "");
         if(v !== "") i.value = Number(v).toLocaleString('vi-VN');
     };
 
-    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert("Sai thông tin đăng nhập!"));
+    window.resetForm = () => {
+        document.getElementById('edit-id').value = "";
+        document.getElementById('name').value = "";
+        document.getElementById('originalPrice').value = "";
+        document.getElementById('price').value = "";
+        document.getElementById('desc').value = "";
+        document.getElementById('img').value = "";
+        
+        const btn = document.getElementById('btn-save');
+        btn.innerText = "LƯU SẢN PHẨM";
+        btn.classList.remove('btn-update-mode');
+        document.getElementById('form-title').innerText = "Thêm Sản Phẩm Mới";
+    };
+
+    // --- XỬ LÝ ĐĂNG NHẬP ---
+    window.login = () => signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value).catch(e => alert("Sai thông tin!"));
+    window.logout = () => signOut(auth).then(() => location.reload());
 
     onAuthStateChanged(auth, user => {
         if(user) {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('admin-content').classList.remove('hidden');
-            document.getElementById('list').classList.remove('hidden');
-            loadList();
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('admin-section').classList.remove('hidden');
+            loadData();
         }
     });
 
+    // --- XỬ LÝ DỮ LIỆU (CRUD) ---
     window.save = () => {
         const id = document.getElementById('edit-id').value;
         const name = document.getElementById('name').value;
+        // Lấy giá trị số nguyên để lưu vào DB
+        const originalPrice = document.getElementById('originalPrice').value.replace(/\./g, "");
         const price = document.getElementById('price').value.replace(/\./g, "");
         const desc = document.getElementById('desc').value;
         const img = document.getElementById('img').value;
 
-        if(!name) return alert("Vui lòng nhập tên!");
-        const data = { name, price, desc, img, zalo: "0919005366" };
+        if(!name) return alert("Chưa nhập tên sản phẩm!");
+
+        const data = { 
+            name, 
+            originalPrice, // Lưu giá vốn (Chỉ admin thấy)
+            price,         // Lưu giá bán (Khách thấy)
+            desc, 
+            img, 
+            zalo: "0919005366" 
+        };
 
         if(id) {
-            update(ref(db, 'products/' + id), data).then(() => { alert("Đã cập nhật!"); location.reload(); });
+            update(ref(db, 'products/' + id), data)
+            .then(() => { alert("Đã cập nhật!"); resetForm(); });
         } else {
-            push(ref(db, 'products/'), data).then(() => { alert("Đã đăng!"); location.reload(); });
+            push(ref(db, 'products/'), data)
+            .then(() => { alert("Đã thêm mới!"); resetForm(); });
         }
     };
 
-    function loadList() {
+    function loadData() {
         onValue(ref(db, 'products/'), s => {
-            const listDiv = document.getElementById('list');
-            listDiv.innerHTML = "<h3 style='color:white'>Danh sách sản phẩm:</h3>";
+            allProducts = [];
+            const tbody = document.getElementById('list-body');
+            tbody.innerHTML = "";
+            
+            if(!s.exists()) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center'>Chưa có dữ liệu</td></tr>";
+                return;
+            }
+
             s.forEach(c => {
-                const d = c.val();
-                listDiv.innerHTML += `
-                    <div class="item">
-                        <span>${d.name}</span>
-                        <div>
-                            <button class="btn-s" onclick="prepareEdit('${c.key}', '${d.name}', '${d.price}', \`${d.desc}\`, '${d.img}')">Sửa</button>
-                            <button class="btn-x" onclick="del('${c.key}')">Xóa</button>
-                        </div>
-                    </div>`;
+                const p = c.val();
+                p.id = c.key;
+                allProducts.push(p);
             });
+            renderTable(allProducts);
         });
     }
 
-    window.prepareEdit = (id, n, p, d, i) => {
+    function renderTable(data) {
+        const tbody = document.getElementById('list-body');
+        tbody.innerHTML = "";
+        
+        // Sắp xếp sản phẩm mới nhất lên đầu
+        data.reverse().forEach(p => {
+            const v_in = Number(p.originalPrice || 0);
+            const v_out = Number(p.price || 0);
+            const profit = v_out - v_in;
+
+            // Định dạng hiển thị
+            const s_in = v_in > 0 ? v_in.toLocaleString('vi-VN') : "-";
+            const s_out = v_out > 0 ? v_out.toLocaleString('vi-VN') : "Liên hệ";
+            const s_profit = profit > 0 ? profit.toLocaleString('vi-VN') : (profit < 0 ? "LỖ" : "-");
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td data-label="Tên SP"><strong>${p.name}</strong></td>
+                <td data-label="Giá Vốn" class="price-in">${s_in}</td>
+                <td data-label="Giá Bán" class="price-out">${s_out}</td>
+                <td data-label="Lợi Nhuận" class="profit">${s_profit}</td>
+                <td data-label="Hành động">
+                    <div class="action-btns">
+                        <button class="btn-mini btn-edit" onclick="edit('${p.id}')">Sửa</button>
+                        <button class="btn-mini btn-del" onclick="del('${p.id}')">Xóa</button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // --- TÌM KIẾM ---
+    window.filterList = () => {
+        const txt = document.getElementById('searchAdmin').value.toLowerCase();
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(txt));
+        renderTable(filtered);
+    };
+
+    // --- CHỨC NĂNG SỬA/XÓA (Global Scope) ---
+    window.edit = (id) => {
+        const p = allProducts.find(x => x.id === id);
+        if(!p) return;
+
         document.getElementById('edit-id').value = id;
-        document.getElementById('name').value = n;
-        document.getElementById('price').value = p ? Number(p).toLocaleString('vi-VN') : "";
-        document.getElementById('desc').value = d;
-        document.getElementById('img').value = i;
-        document.getElementById('title').innerText = "ĐANG CHỈNH SỬA";
-        document.getElementById('btn-save').innerText = "LƯU CẬP NHẬT";
-        document.getElementById('btn-save').classList.add('btn-update');
+        document.getElementById('name').value = p.name;
+        document.getElementById('originalPrice').value = p.originalPrice ? Number(p.originalPrice).toLocaleString('vi-VN') : "";
+        document.getElementById('price').value = p.price ? Number(p.price).toLocaleString('vi-VN') : "";
+        document.getElementById('desc').value = p.desc;
+        document.getElementById('img').value = p.img;
+        
+        document.getElementById('form-title').innerText = "Đang Sửa: " + p.name;
+        const btn = document.getElementById('btn-save');
+        btn.innerText = "CẬP NHẬT THAY ĐỔI";
+        btn.classList.add('btn-update-mode');
         window.scrollTo(0,0);
     };
 
-    window.del = id => { if(confirm("Xóa chứ sếp?")) remove(ref(db, 'products/' + id)); };
+    window.del = id => { if(confirm("Sếp chắc chắn muốn xóa không?")) remove(ref(db, 'products/' + id)); };
 </script>
 </body>
 </html>
